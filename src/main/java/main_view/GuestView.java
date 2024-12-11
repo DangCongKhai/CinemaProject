@@ -4,9 +4,12 @@
  */
 package main_view;
 
+import com.formdev.flatlaf.FlatIntelliJLaf;
 import customer_panel.MovieDashBoardPanel;
+import customer_panel.MovieDisplayPanel;
 import customer_panel.MovieInfoPanel;
-import customer_panel.ScreenPanel;
+import customer_panel.CustomerScreenPanel;
+import customer_panel.GuestScreenPanel;
 import java.awt.Color;
 import javax.swing.*;
 import java.awt.*;
@@ -19,9 +22,10 @@ import model.User;
 public class GuestView extends javax.swing.JFrame {
     private User customer;
     private customer_panel.MovieDashBoardPanel movieDashBoardPanel1;
+    private customer_panel.MovieDisplayPanel movieDisplayPanel1;
     private customer_panel.MovieInfoPanel movieInfoPanel1;
     private customer_panel.BookingHistoryPanel bookingHistoryPanel;
-    private customer_panel.ScreenPanel screenPanel1;
+    private customer_panel.GuestScreenPanel screenPanel1;
     public void setCustomer(User customer) {
         this.customer = customer;
     }
@@ -33,7 +37,8 @@ public class GuestView extends javax.swing.JFrame {
         bt_homepage.setBackground(new Color(78,139, 215));
        
         bt_faq.setBackground(new Color(0, 51, 102));
-        movieDashBoardPanel1 = new MovieDashBoardPanel(this);
+//        movieDashBoardPanel1 = new MovieDashBoardPanel(this);
+        movieDisplayPanel1 = new MovieDisplayPanel(this);
         showMovieDashBoard();
         icon();
     }
@@ -143,6 +148,8 @@ public class GuestView extends javax.swing.JFrame {
         );
 
         right_panel.setLayout(new java.awt.CardLayout());
+
+        frequentlyAskedQuestionPanel1.setBackground(new java.awt.Color(255, 255, 255));
         right_panel.add(frequentlyAskedQuestionPanel1, "card4");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -151,8 +158,8 @@ public class GuestView extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(left_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(right_panel, javax.swing.GroupLayout.DEFAULT_SIZE, 992, Short.MAX_VALUE))
+                .addGap(0, 0, 0)
+                .addComponent(right_panel, javax.swing.GroupLayout.DEFAULT_SIZE, 998, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -168,7 +175,7 @@ public class GuestView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
     public void showMovieDashBoard(){
         right_panel.removeAll();
-        right_panel.add(movieDashBoardPanel1);
+        right_panel.add(movieDisplayPanel1);
         right_panel.repaint();
         right_panel.revalidate();
     }
@@ -204,8 +211,8 @@ public class GuestView extends javax.swing.JFrame {
         right_panel.revalidate();
     }
     
-    public void showBookingScreen(){
-        screenPanel1 = new ScreenPanel();
+    public void showBookingScreen(Movie movie){
+        screenPanel1 = new GuestScreenPanel(movie);
         screenPanel1.setUser(customer);
         right_panel.removeAll();
         right_panel.add(screenPanel1);
@@ -229,21 +236,9 @@ public class GuestView extends javax.swing.JFrame {
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
         try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(GuestView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(GuestView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(GuestView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(GuestView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
+            UIManager.setLookAndFeel(new FlatIntelliJLaf());
+        } catch (UnsupportedLookAndFeelException e) {}
+
         //</editor-fold>
 
         /* Create and display the form */

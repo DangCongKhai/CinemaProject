@@ -8,6 +8,7 @@ import database.Database;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -40,7 +41,6 @@ public class CustomerController {
     
     public ArrayList<Movie> getMovies(){
         if (conn == null){
-            System.out.println("No value:");
             return new ArrayList<Movie>();
         }
         String query = "SELECT * FROM Movie";
@@ -55,15 +55,37 @@ public class CustomerController {
                 movies_list.add(new Movie(movieId, title, genre,duration,actor, description, image));
                 
             }
-            
         }catch (SQLException ex) {
 //            Logger.getLogger(CustomerController.class.getName()).log(Level.SEVERE, null, ex);
         }
 //            Logger.getLogger(CustomerController.class.getName()).log(Level.SEVERE, null, ex);
         return movies_list;
-        
-        
     }
+    
+    public ArrayList<Movie> searchByTitles(String search_title){
+       
+        String query = "SELECT * FROM Movie WHERE Title like ?";
+        ResultSet res = null;
+        ArrayList<Movie> movies_list = new ArrayList();
+        try {
+            PreparedStatement statement = conn.prepareStatement(query);
+            statement.setString(1, "%" + search_title+"%");
+            res = statement.executeQuery();
+            while (res.next()){
+                int movieId = res.getInt("MovieID"); String title = res.getString("Title"); String genre = res.getString("Genre"); String actor = res.getString("Actor");
+                int duration = res.getInt("Duration"); String description = res.getString("Description"); byte[] image = res.getBytes("Image");
+                
+                movies_list.add(new Movie(movieId, title, genre,duration,actor, description, image));
+                
+            }
+        }catch (SQLException ex) {
+//            Logger.getLogger(CustomerController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+//            Logger.getLogger(CustomerController.class.getName()).log(Level.SEVERE, null, ex);
+      
+        return movies_list;
+    }
+    
     
   
     

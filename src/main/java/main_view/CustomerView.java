@@ -8,7 +8,7 @@ import com.formdev.flatlaf.FlatIntelliJLaf;
 import customer_panel.BookingHistoryPanel;
 import customer_panel.MovieDashBoardPanel;
 import customer_panel.MovieInfoPanel;
-import customer_panel.ScreenPanel;
+import customer_panel.CustomerScreenPanel;
 import javax.swing.*;
 import java.awt.*;
 import model.Customer;
@@ -24,7 +24,7 @@ public class CustomerView extends javax.swing.JFrame {
     private customer_panel.MovieDashBoardPanel movieDashBoardPanel1;
     private customer_panel.MovieInfoPanel movieInfoPanel1;
     private customer_panel.BookingHistoryPanel bookingHistoryPanel;
-    private customer_panel.ScreenPanel screenPanel1;
+    private customer_panel.CustomerScreenPanel screenPanel1;
     public void setCustomer(User customer) {
         this.customer = customer;
     }
@@ -289,7 +289,7 @@ public class CustomerView extends javax.swing.JFrame {
     }
     
     public void showBookingScreen(){
-        screenPanel1 = new ScreenPanel();
+        screenPanel1 = new CustomerScreenPanel();
         screenPanel1.setUser(customer);
         right_panel.removeAll();
         right_panel.add(screenPanel1);

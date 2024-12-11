@@ -303,7 +303,7 @@ public class MovieManagementPanel extends javax.swing.JPanel {
         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGroup(layout.createSequentialGroup()
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addGap(0, 0, 0)
             .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
     );
     layout.setVerticalGroup(
@@ -477,7 +477,7 @@ public class MovieManagementPanel extends javax.swing.JPanel {
             }
         }
         
-        Movie new_movie = new Movie(tableModel.getRowCount() + 1,title, genre, duration, actor, description, image);
+        Movie new_movie = new Movie(old_movie.getMovieID(),title, genre, duration, actor, description, image);
         tableModel.setValueAt(title, selected_row, 0);
         tableModel.setValueAt(genre, selected_row, 1);
         tableModel.setValueAt(duration_text, selected_row, 2);
@@ -558,7 +558,6 @@ private void checkForChanges() {
         original_actor = (String) tableModel.getValueAt(selected_row, 3);
         original_description = (String) tableModel.getValueAt(selected_row, 4);
         
-  
         tf_title.setText(original_title);
         tf_genre.setText(original_genre);
         tf_duration.setText(original_duration);

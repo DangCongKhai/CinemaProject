@@ -421,7 +421,7 @@ public class SchedulePanel extends javax.swing.JPanel {
         String confirm_messsage = String.format("Are you sure to add this movie schedule? \n Title: %s \n ShowDate: %s \n Show Time: %s-%s \n Price: %d \n Screen: %d", title, date.toString(), start_time_text, end_time_text, price, screen_number );
         int result = JOptionPane.showConfirmDialog(this, confirm_messsage, "Confirm schedule", JOptionPane.YES_NO_OPTION);
         if (result == 0){
-            Schedule schedule = new Schedule(schedules_list.getLast().getScheduleID() + 1, title, date, start_time_text, end_time_text, price, screen_number );
+            Schedule schedule = new Schedule(schedules_list.size() + 1, title, date, start_time_text, end_time_text, price, screen_number );
             if (admin_controller.insertSchedule(schedule)){
                 schedules_list.add(schedule);
                 table_model.addRow(row);

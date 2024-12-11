@@ -278,7 +278,7 @@ public class MovieInfoPanel extends javax.swing.JPanel {
     private void bt_book_ticketActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_book_ticketActionPerformed
         // TODO add your handling code here:
         if (customer_view == null){
-            user_view.showBookingScreen();
+            user_view.showBookingScreen(movie);
             
         }else{
             customer_view.showBookingScreen();

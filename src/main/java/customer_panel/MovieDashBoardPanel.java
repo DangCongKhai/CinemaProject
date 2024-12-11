@@ -8,9 +8,12 @@ import controller.CustomerController;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Graphics;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -20,6 +23,7 @@ import java.util.ArrayList;
 import java.util.function.Consumer;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -41,7 +45,7 @@ public class MovieDashBoardPanel extends javax.swing.JPanel {
      */
     public MovieDashBoardPanel(CustomerView frame) {
         this.customer_view = frame;
-        movies_list = customer_controller.getMovies();
+      
         initComponents();
     }
     
@@ -49,6 +53,7 @@ public class MovieDashBoardPanel extends javax.swing.JPanel {
         this.guest_view = frame;
         
         initComponents();
+        this.add(tf_search, BorderLayout.NORTH);
     }
     
     /**
@@ -61,9 +66,7 @@ public class MovieDashBoardPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         tf_search = new javax.swing.JTextField();
-        main_panel = new javax.swing.JPanel();
-
-        setBackground(new java.awt.Color(255, 255, 255));
+        moviesPanel = new javax.swing.JPanel();
 
         tf_search.setText("Search film here...");
         tf_search.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -73,42 +76,83 @@ public class MovieDashBoardPanel extends javax.swing.JPanel {
             }
         });
 
-        main_panel.setBackground(new java.awt.Color(255, 255, 255));
-        main_panel.setLayout(new java.awt.GridLayout(0, 4, 10, 10));
+        setBackground(new java.awt.Color(255, 255, 255));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(33, 33, 33)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(main_panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(tf_search, javax.swing.GroupLayout.DEFAULT_SIZE, 818, Short.MAX_VALUE))
-                .addGap(49, 49, 49))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(tf_search, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(main_panel, javax.swing.GroupLayout.DEFAULT_SIZE, 549, Short.MAX_VALUE)
-                .addGap(20, 20, 20))
-        );
+        moviesPanel.setBackground(new java.awt.Color(255, 255, 255));
+        moviesPanel.setLayout(new java.awt.GridBagLayout());
 
-        for (Movie movie : movies_list){
+        // Add movies in rows of 4
+
+        add(moviesPanel);
+        // Calculate dimensions for positioning
+        //int movieWidth = 300;
+        //int movieHeight = 450;
+        //int columns = 3;
+        //int gap = 10;
+        //int x = 20, y = 10;
+        //
+        //// Add movie panels to the moviesPanel
+        //for (int i = 0; i < movies_list.size(); i++) {
+            //    Movie movie = movies_list.get(i);
+            //    JPanel moviePanel = createMoviePanel(movie);
+            //
+            //    // Set fixed size and position for each panel
+            //    moviePanel.setBounds(x, y, movieWidth, movieHeight);
+            //    moviesPanel.add(moviePanel);
+            //
+            //    // Update x and y for next panel
+            //    if ((i + 1) % columns == 0) {
+                //        x = 20;
+                //        y += movieHeight + gap;
+                //    } else {
+                //        x += movieWidth + gap;
+                //    }
+            //}
+        //
+        //// Calculate and set the preferred size of the moviesPanel
+        //int rows = (int) Math.ceil((double) movies_list.size() / columns);
+        //int panelWidth = columns * (movieWidth + gap) - gap;
+        //int panelHeight = rows * (movieHeight + gap) - gap;
+        //moviesPanel.setPreferredSize(new Dimension(panelWidth, panelHeight));
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10); // Margin around posters
+        gbc.fill = GridBagConstraints.BOTH; // Make components fill the available space
+        gbc.weightx = 1.0; // Allow horizontal resizing
+        gbc.weighty = 1.0; // Allow vertical resizing
+
+        int columns = 3; // Number of columns for the layout
+        int currentColumn = 0;
+
+        // Example list of movies
+        for (int i = 0; i < movies_list.size(); i++) {
+            Movie movie = movies_list.get(i);
             JPanel moviePanel = createMoviePanel(movie);
-            main_panel.add(moviePanel);
 
+            // Position movie panels in the grid
+            gbc.gridx = currentColumn; // Column index
+            gbc.gridy = i / columns; // Row index
+            moviesPanel.add(moviePanel, gbc);
+
+            // Move to the next column
+            currentColumn++;
+            if (currentColumn >= columns) {
+                currentColumn = 0;
+            }
         }
-        // Wrap main panel in a JScrollPane
-        JScrollPane scrollPane = new JScrollPane(main_panel);
+        // Wrap the moviesPanel in a JScrollPane
+        JScrollPane scrollPane = new JScrollPane(moviesPanel);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        this.add(scrollPane);
-        this.setVisible(true);
+
+        //// Add the scrollPane to the main panel
+        this.setLayout(new BorderLayout());
+        this.add(scrollPane, BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void tf_searchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tf_searchActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tf_searchActionPerformed
     static class ScalableImagePanel extends JPanel {
         private BufferedImage originalImage;
 
@@ -135,14 +179,16 @@ public class MovieDashBoardPanel extends javax.swing.JPanel {
     private JPanel createMoviePanel(Movie movie) {
         JPanel panel = new JPanel(new BorderLayout());
 //        panel.setBorder(BorderFactory.createLineBorder(Color.black));
+        panel.setPreferredSize(new Dimension(300, 400));
         panel.setBackground(Color.WHITE);
         // Custom scalable image panel
         ScalableImagePanel imagePanel = new ScalableImagePanel(movie.getImage());
-        imagePanel.setPreferredSize(new Dimension(200, 300));
+        imagePanel.setPreferredSize(new Dimension(300, 360));
         
+        panel.add(Box.createRigidArea(new Dimension(0, 10))); 
         // Movie title
         JLabel titleLabel = new JLabel(movie.getTitle(), JLabel.CENTER);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 17));
 
         // Add components to the panel
         panel.add(imagePanel, BorderLayout.CENTER);
@@ -162,13 +208,9 @@ public class MovieDashBoardPanel extends javax.swing.JPanel {
         return panel;
     }
 
-    private void tf_searchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tf_searchActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tf_searchActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel main_panel;
+    private javax.swing.JPanel moviesPanel;
     private javax.swing.JTextField tf_search;
     // End of variables declaration//GEN-END:variables
 }

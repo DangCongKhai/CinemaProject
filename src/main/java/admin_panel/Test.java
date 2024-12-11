@@ -20,6 +20,11 @@ public class Test {
 //       LocalTime t1 = LocalTime.
 //        User a = new Customer(null, 0, "Khai", "Male");
 //        System.out.println(a.getName());
+        long a = 10000;
+        String price = String.valueOf(a);
+        price = price.substring(0, price.length() - 3) + "K";
+        System.out.println(price);
+        
        
     }
 }

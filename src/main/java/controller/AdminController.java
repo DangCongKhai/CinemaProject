@@ -52,16 +52,17 @@ public class AdminController {
     public boolean addMovie(Movie new_movie){
         
 
-        String query = "INSERT INTO Movie(Title, Genre, Duration, Actor, Description, Image)"
-                + "VALUES ( ?,?,?,?, ?, ?)";
+        String query = "INSERT INTO Movie(MovieID, Title, Genre, Duration, Actor, Description, Image)"
+                + "VALUES ( ?, ?,?,?,?, ?, ?)";
         try {
             PreparedStatement pstm = conn.prepareStatement(query);
-            pstm.setString(1, new_movie.getTitle());
-            pstm.setString(2, new_movie.getGenre());
-            pstm.setInt(3, new_movie.getDuration());
-            pstm.setString(4, new_movie.getActor());
-            pstm.setString(5, new_movie.getDescription());
-            pstm.setBytes(6, new_movie.getImage());
+            pstm.setInt(1, new_movie.getMovieID());
+            pstm.setString(2, new_movie.getTitle());
+            pstm.setString(3, new_movie.getGenre());
+            pstm.setInt(4, new_movie.getDuration());
+            pstm.setString(5, new_movie.getActor());
+            pstm.setString(6, new_movie.getDescription());
+            pstm.setBytes(7, new_movie.getImage());
             
             int row = pstm.executeUpdate();
             if (row > 0){
@@ -216,17 +217,18 @@ public class AdminController {
             
             if (!overlapped_result.next()){
                         
-                String query = "INSERT INTO Schedule (ShowDate, StartTime, EndTime, Price, MovieID, ScreenID)\n" +
-                                "VALUES (?, ?, ?, ?, (SELECT MovieID FROM Movie where Title = ?), (SELECT ScreenID FROM Screen where ScreenNumber = ?))";
+                String query = "INSERT INTO Schedule (ScheduleID, ShowDate, StartTime, EndTime, Price, MovieID, ScreenID)\n" +
+                                "VALUES (?, ?, ?, ?, ?, (SELECT MovieID FROM Movie where Title = ?), (SELECT ScreenID FROM Screen where ScreenNumber = ?))";
                 int res;
                 try{
                    PreparedStatement insert_pstm = conn.prepareStatement(query);
-                    insert_pstm.setDate(1, sql_date);
-                    insert_pstm.setInt(2, start_time);
-                    insert_pstm.setInt(3, end_time);
-                    insert_pstm.setLong(4, schedule.getPrice());
-                    insert_pstm.setString(5, schedule.getTitle());
-                    insert_pstm.setInt(6, screen_number);
+                   insert_pstm.setInt(1, schedule.getScheduleID());
+                    insert_pstm.setDate(2, sql_date);
+                    insert_pstm.setInt(3, start_time);
+                    insert_pstm.setInt(4, end_time);
+                    insert_pstm.setLong(5, schedule.getPrice());
+                    insert_pstm.setString(6, schedule.getTitle());
+                    insert_pstm.setInt(7, screen_number);
                     res = insert_pstm.executeUpdate();
                   
                     if (res == 1){

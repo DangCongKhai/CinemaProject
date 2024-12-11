@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
+  <NonVisualComponents>
+    <Component class="javax.swing.JTextField" name="tf_search">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Search film here..."/>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
+            <LineBorder/>
+          </Border>
+        </Property>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tf_searchActionPerformed"/>
+      </Events>
+    </Component>
+  </NonVisualComponents>
   <Properties>
     <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
       <Color blue="ff" green="ff" red="ff" type="rgb"/>
@@ -16,63 +31,23 @@
     <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+    <AuxValue name="designerSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,2,88,0,0,3,-124"/>
   </AuxValues>
 
-  <Layout>
-    <DimensionLayout dim="0">
-      <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="main_panel" max="32767" attributes="0"/>
-                  <Component id="tf_search" pref="818" max="32767" attributes="0"/>
-              </Group>
-              <EmptySpace min="-2" pref="49" max="-2" attributes="0"/>
-          </Group>
-      </Group>
-    </DimensionLayout>
-    <DimensionLayout dim="1">
-      <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Component id="tf_search" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Component id="main_panel" pref="549" max="32767" attributes="0"/>
-              <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
-          </Group>
-      </Group>
-    </DimensionLayout>
-  </Layout>
+  <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout"/>
   <SubComponents>
-    <Component class="javax.swing.JTextField" name="tf_search">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Search film here..."/>
-        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-          <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
-            <LineBorder/>
-          </Border>
-        </Property>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tf_searchActionPerformed"/>
-      </Events>
-    </Component>
-    <Container class="javax.swing.JPanel" name="main_panel">
+    <Container class="javax.swing.JPanel" name="moviesPanel">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="ff" green="ff" red="ff" type="rgb"/>
         </Property>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="for (Movie movie : movies_list){&#xa;            JPanel moviePanel = createMoviePanel(movie);&#xa;            main_panel.add(moviePanel);&#xa;&#xa;        }&#xa;// Wrap main panel in a JScrollPane&#xa;JScrollPane scrollPane = new JScrollPane(main_panel);&#xa;scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);&#xa;scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);&#xa;this.add(scrollPane);&#xa;this.setVisible(true);"/>
+        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="// Calculate dimensions for positioning&#xa;//int movieWidth = 300;&#xa;//int movieHeight = 450;&#xa;//int columns = 3;&#xa;//int gap = 10;&#xa;//int x = 20, y = 10;&#xa;//&#xa;//// Add movie panels to the moviesPanel&#xa;//for (int i = 0; i &lt; movies_list.size(); i++) {&#xa;//    Movie movie = movies_list.get(i);&#xa;//    JPanel moviePanel = createMoviePanel(movie);&#xa;//&#xa;//    // Set fixed size and position for each panel&#xa;//    moviePanel.setBounds(x, y, movieWidth, movieHeight);&#xa;//    moviesPanel.add(moviePanel);&#xa;//&#xa;//    // Update x and y for next panel&#xa;//    if ((i + 1) % columns == 0) {&#xa;//        x = 20;&#xa;//        y += movieHeight + gap;&#xa;//    } else {&#xa;//        x += movieWidth + gap;&#xa;//    }&#xa;//}&#xa;//&#xa;//// Calculate and set the preferred size of the moviesPanel&#xa;//int rows = (int) Math.ceil((double) movies_list.size() / columns);&#xa;//int panelWidth = columns * (movieWidth + gap) - gap;&#xa;//int panelHeight = rows * (movieHeight + gap) - gap;&#xa;//moviesPanel.setPreferredSize(new Dimension(panelWidth, panelHeight));&#xa;GridBagConstraints gbc = new GridBagConstraints();&#xa;gbc.insets = new Insets(10, 10, 10, 10); // Margin around posters&#xa;gbc.fill = GridBagConstraints.BOTH; // Make components fill the available space&#xa;gbc.weightx = 1.0; // Allow horizontal resizing&#xa;gbc.weighty = 1.0; // Allow vertical resizing&#xa;&#xa;int columns = 3; // Number of columns for the layout&#xa;int currentColumn = 0;&#xa;&#xa;// Example list of movies&#xa;for (int i = 0; i &lt; movies_list.size(); i++) {&#xa;    Movie movie = movies_list.get(i);&#xa;    JPanel moviePanel = createMoviePanel(movie);&#xa;&#xa;    // Position movie panels in the grid&#xa;    gbc.gridx = currentColumn; // Column index&#xa;    gbc.gridy = i / columns; // Row index&#xa;    moviesPanel.add(moviePanel, gbc);&#xa;&#xa;    // Move to the next column&#xa;    currentColumn++;&#xa;    if (currentColumn &gt;= columns) {&#xa;        currentColumn = 0;&#xa;    }&#xa;}&#xa;// Wrap the moviesPanel in a JScrollPane&#xa;JScrollPane scrollPane = new JScrollPane(moviesPanel);&#xa;scrollPane.getVerticalScrollBar().setUnitIncrement(16);&#xa;scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);&#xa;scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);&#xa;&#xa;//// Add the scrollPane to the main panel&#xa;this.setLayout(new BorderLayout());&#xa;this.add(scrollPane, BorderLayout.CENTER);"/>
+        <AuxValue name="JavaCodeGenerator_LayoutCodePost" type="java.lang.String" value="// Add movies in rows of 4"/>
       </AuxValues>
 
-      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
-        <Property name="columns" type="int" value="4"/>
-        <Property name="horizontalGap" type="int" value="10"/>
-        <Property name="rows" type="int" value="0"/>
-        <Property name="verticalGap" type="int" value="10"/>
-      </Layout>
+      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout"/>
     </Container>
   </SubComponents>
 </Form>
