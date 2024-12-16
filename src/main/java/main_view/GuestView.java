@@ -213,7 +213,7 @@ public class GuestView extends javax.swing.JFrame {
     
     public void showBookingScreen(Movie movie){
         screenPanel1 = new GuestScreenPanel(movie);
-        screenPanel1.setUser(customer);
+//        screenPanel1.setUser(customer);
         right_panel.removeAll();
         right_panel.add(screenPanel1);
         right_panel.repaint();

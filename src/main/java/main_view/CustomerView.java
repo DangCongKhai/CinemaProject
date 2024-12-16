@@ -20,20 +20,20 @@ import model.User;
  * @author OS
  */
 public class CustomerView extends javax.swing.JFrame {
-    private User customer;
+    private Customer customer;
     private customer_panel.MovieDashBoardPanel movieDashBoardPanel1;
     private customer_panel.MovieInfoPanel movieInfoPanel1;
     private customer_panel.BookingHistoryPanel bookingHistoryPanel;
     private customer_panel.CustomerScreenPanel screenPanel1;
-    public void setCustomer(User customer) {
+    public void setCustomer(Customer customer) {
         this.customer = customer;
     }
     /**
      * Creates new form Admin
      */
-    public CustomerView() {
+    public CustomerView(Customer customer) {
         initComponents();
-        
+        this.customer = customer;
         bt_homepage.setBackground(new Color(78,139, 215));
         bt_edit_info.setBackground(new Color(0, 51, 102));
         bt_faq.setBackground(new Color(0, 51, 102));
@@ -288,9 +288,9 @@ public class CustomerView extends javax.swing.JFrame {
         right_panel.revalidate();
     }
     
-    public void showBookingScreen(){
-        screenPanel1 = new CustomerScreenPanel();
-        screenPanel1.setUser(customer);
+    public void showBookingScreen(Movie movie){
+        screenPanel1 = new CustomerScreenPanel(movie, customer);
+       
         right_panel.removeAll();
         right_panel.add(screenPanel1);
         right_panel.repaint();
@@ -299,29 +299,7 @@ public class CustomerView extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            UIManager.setLookAndFeel(new FlatIntelliJLaf());
-        } catch (UnsupportedLookAndFeelException e) {}
-
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new CustomerView().setVisible(true);
-            }
-        });
-    }
-
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel admin_label;
     private javax.swing.JButton bt_booking_history;

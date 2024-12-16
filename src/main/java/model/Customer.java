@@ -9,34 +9,34 @@ package model;
  * @author mac
  */
 public class Customer extends User{
+    private String email;
     private String birth_date;
-    private long balance;
+   
 
-    public Customer(String birth_date, long balance, int user_id, String name, String gender, String role) {
+    public Customer(String email, String birth_date,int user_id, String name, String gender, String role) {
         super(user_id, name, gender, role);
+        this.email = email;
         this.birth_date = birth_date;
-        this.balance = balance;
+  
     }
 
-    
+    public String getEmail() {
+        return email;
+    }
 
-  
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public String getBirth_date() {
         return birth_date;
     }
 
-    public long getBalance() {
-        return balance;
-    }
-
+  
     public void setBirth_date(String birth_date) {
         this.birth_date = birth_date;
     }
 
-    public void setBalance(long balance) {
-        this.balance = balance;
-    }
     
     
 }

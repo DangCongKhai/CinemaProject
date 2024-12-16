@@ -308,6 +308,8 @@ public class SignUpFrame extends javax.swing.JFrame {
         try {
             if(sign_up_controller.signUpAccount(email, password)){
                 JOptionPane.showMessageDialog(this, "Sucessful sign up", "Success sign up", JOptionPane.PLAIN_MESSAGE);
+                new SignInFrame().setVisible(true);
+                this.setVisible(false);
                 return;
             }else{
                 JOptionPane.showMessageDialog(this, email + " is existed", "Fail to sign up", JOptionPane.PLAIN_MESSAGE);

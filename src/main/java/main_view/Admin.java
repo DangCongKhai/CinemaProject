@@ -264,6 +264,8 @@ public class Admin extends javax.swing.JFrame {
     }//GEN-LAST:event_bt_scheduleActionPerformed
     private void showScheduleManagement(){
         schedulePanel = new SchedulePanel();
+        schedulePanel.repaint();
+        schedulePanel.revalidate();
         right_panel.removeAll();
         right_panel.add(schedulePanel);
         right_panel.repaint();

@@ -12,6 +12,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import model.Customer;
 import model.User;
 
 
@@ -256,28 +257,29 @@ public class SignInFrame extends javax.swing.JFrame {
         }
         
         
-        try {
-            int account_id = sign_in_controller.login(email, password);
-            if (account_id == -1){
-                JOptionPane.showMessageDialog(this, "Incorrect password", "Error", JOptionPane.ERROR_MESSAGE);
+
+        int account_id = sign_in_controller.login(email, password);
+        if (account_id == -1){
+            JOptionPane.showMessageDialog(this, "Incorrect password", "Error", JOptionPane.ERROR_MESSAGE);
+        }else{
+            String role = sign_in_controller.getRole(account_id);
+            if (role.equals("Customer")){
+                Customer customer = sign_in_controller.getCustomer(account_id);
+                CustomerView customer_view = new CustomerView(customer);
+//                    customer_view.setCustomer(user);
+                customer_view.setVisible(true);
+                this.setVisible(false);
             }else{
-                User user = sign_in_controller.getUserInfo(account_id);
-                if (user.getRole().equals("Customer")){
-                    CustomerView customer_view = new CustomerView();
-                    customer_view.setCustomer(user);
-                    customer_view.setVisible(true);
-                    this.setVisible(false);
-                }else{
-                    Admin admin_view = new Admin();
-                    admin_view.setUser(user);
-                    admin_view.setVisible(true);
-                    this.setVisible(false);
-                }
+                Admin admin_view = new Admin();
+//                    admin_view.setUser(user);
+                admin_view.setVisible(true);
+                this.setVisible(false);
             }
-           
-        } catch (SQLException ex) {
-//            Logger.getLogger(SignInFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
+           
+        
+//            Logger.getLogger(SignInFrame.class.getName()).log(Level.SEVERE, null, ex);
+        
     }//GEN-LAST:event_btnSignInActionPerformed
     private boolean validEmail(String email){
         Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(email);

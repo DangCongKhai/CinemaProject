@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import static util.Util.hashPassword;
@@ -38,10 +39,6 @@ public class SignUpController {
         PreparedStatement pstm = null;
         try {
             pstm = conn.prepareStatement(query);
-        } catch (SQLException ex) {
-//            Logger.getLogger(SignUpController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        try {
             pstm.setString(1, email);
             ResultSet rs = pstm.executeQuery();
             if (rs.next()){
@@ -50,8 +47,7 @@ public class SignUpController {
         } catch (SQLException ex) {
 //            Logger.getLogger(SignUpController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
+ 
         return false;
     }
     
@@ -59,28 +55,83 @@ public class SignUpController {
         if (isEmailExist(email)){
             return false;
         }
+        int account_id = -1;
         String hashed_password = hashPassword(password);
-        String query = "INSERT INTO Account(Email, Password, Role)" 
-                        + "VALUES (?, ? ,'Customer');"
-                + "INSERT INTO [User](AccountID, Name, Balance)"
-                + "VALUES ((SELECT AccountID FROM Account WHERE Email = ?), 'Customer', 0);";
-        
+        String insert_account_query = "INSERT INTO Account(Email, Password, Role) " 
+                        + "VALUES (?, ? ,'Customer');";
         // Get connection
+        PreparedStatement ps1 = null;
+        ps1 = conn.prepareStatement(insert_account_query, Statement.RETURN_GENERATED_KEYS);
+        ps1.setString(1, email);
+        ps1.setString(2, hashed_password);
+        ps1.executeUpdate();
+        ResultSet account_id_generated = ps1.getGeneratedKeys();
+        if (account_id_generated.next()){
+
+            account_id = account_id_generated.getInt(1);
+            System.out.println("Generated account ID: "+account_id);
+            String insert_user = "INSERT INTO [User](AccountID, Name) \n"
+                                + "VALUES (?, ?);";
+            PreparedStatement ps2 = null;
+            ps2 = conn.prepareStatement(insert_user, Statement.RETURN_GENERATED_KEYS);
+            ps2.setInt(1, account_id);
+            ps2.setString(2, "Customer"); 
+            ps2.executeUpdate();
+            return true;
+        }
+        
+        return false;  
+        
+    }
+    
+    public int getAccountID(String email, String password, String name){
+        int account_id = -1;
+        String query = "SELECT AccountID FROM Account WHERE Email = ?";
         PreparedStatement pstm = null;
         try {
             pstm = conn.prepareStatement(query);
+            pstm.setString(1, email);
+            ResultSet rs = pstm.executeQuery();
+            if (rs.next()){
+                return rs.getInt("AccountID");
+            }
         } catch (SQLException ex) {
+            System.out.println("Error while getting Account ID on top 1");
+            System.out.println(ex.getMessage());
 //            Logger.getLogger(SignUpController.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        pstm.setString(1, email);
-        pstm.setString(2, hashed_password);
-        pstm.setString(3, email);
-        
-        int row = pstm.executeUpdate();
-        return true;
-        
-        
+        try {
+            String hashed_password = hashPassword(password);
+            String insert_account_query = "INSERT INTO Account(Email, Password, Role) " 
+                            + "VALUES (?, ? ,'Customer');";
+            // Get connection
+            PreparedStatement ps1 = null;
+            ps1 = conn.prepareStatement(insert_account_query, Statement.RETURN_GENERATED_KEYS);
+            ps1.setString(1, email);
+            ps1.setString(2, hashed_password);
+            ps1.executeUpdate();
+            
+            ResultSet account_id_generated = ps1.getGeneratedKeys();
+            if (account_id_generated.next()){
+     
+                account_id = account_id_generated.getInt(1);
+                System.out.println("Generated account ID: "+account_id);
+                String insert_user = "INSERT INTO [User](AccountID, Name) \n"
+                                    + "VALUES (?, ?);";
+                PreparedStatement ps2 = null;
+                ps2 = conn.prepareStatement(insert_user, Statement.RETURN_GENERATED_KEYS);
+                ps2.setInt(1, account_id);
+                ps2.setString(2, name); 
+                ps2.executeUpdate();
+            }
+        } catch (SQLException ex) {
+//            Logger.getLogger(SignUpController.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Error while getting Account ID");
+            System.out.println(ex.getMessage());
+        }
+       
+        return account_id;
     }
     
 }

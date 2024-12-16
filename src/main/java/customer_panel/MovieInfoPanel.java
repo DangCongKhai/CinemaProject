@@ -260,8 +260,8 @@ public class MovieInfoPanel extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(40, 40, 40)
-                .addComponent(lb_poster, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
+                .addComponent(lb_poster, javax.swing.GroupLayout.PREFERRED_SIZE, 392, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 90, Short.MAX_VALUE)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -278,10 +278,11 @@ public class MovieInfoPanel extends javax.swing.JPanel {
     private void bt_book_ticketActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_book_ticketActionPerformed
         // TODO add your handling code here:
         if (customer_view == null){
+            System.out.println("Show user first");
             user_view.showBookingScreen(movie);
             
         }else{
-            customer_view.showBookingScreen();
+            customer_view.showBookingScreen(movie);
         }
         
         

@@ -74,7 +74,7 @@ public class SchedulePanel extends javax.swing.JPanel {
                 int YEAR = Integer.valueOf(d.split("-")[2]);
                 SelectedDate selected_date = new SelectedDate(DAY, MONTH, YEAR);
                 String start_time = hourMinuteToTime(result.getInt("StartTime"));
-                String end_time = hourMinuteToTime(result.getInt("EndTime"));
+                String end_time = hourMinuteToTime(result.getInt("StartTime") + result.getInt("Duration"));
                 long price = result.getLong("Price");
                 int screen_number = result.getInt("ScreenID");
                 schedules_list.add(new Schedule(scheduleID, title, selected_date, start_time, end_time, price, screen_number));

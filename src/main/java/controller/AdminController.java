@@ -173,7 +173,7 @@ public class AdminController {
     public ResultSet getAvailableSchedule(){
         ArrayList<Schedule> schedules_list = new ArrayList<>();
         Statement statement = null;
-        String query = "select s.*, m.Title from Schedule as s\n" +
+        String query = "select s.*, m.Title, m.Duration from Schedule as s\n" +
                         "JOIN Movie as m ON s.MovieID = m.MovieID"; 
         
         ResultSet result = null;

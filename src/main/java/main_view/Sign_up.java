@@ -14,15 +14,14 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
+import static util.Util.validEmail;
 
 /**
  *
  * @author user
  */
 public class Sign_up extends javax.swing.JFrame {
-    private static final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[\\w.+\\-]+@(gmail\\.com|\\w*.edu.vn)$", Pattern.CASE_INSENSITIVE);
-    private static final String api_key = "12d42e1d76da6625d532fb7eca3d1d570f6956a4";
-    private static final String API_URL = "https://api.hunter.io/v2/email-verifier?email=";
+   
     private static SignUpController sign_up_controller = SignUpController.getInstance();
     /**
      * Creates new form Sign_up
@@ -196,11 +195,11 @@ public class Sign_up extends javax.swing.JFrame {
         
         try {
             if(sign_up_controller.signUpAccount(email, password)){
-                JOptionPane.showMessageDialog(this, "Sucessful sign up", "Success sign up", JOptionPane.PLAIN_MESSAGE);
-                return;
+                // Adding inserting ticket seat here
+                
+                
             }else{
-                JOptionPane.showMessageDialog(this, email + " is existed", "Fail to sign up", JOptionPane.PLAIN_MESSAGE);
-                return;
+                // Email exist meaning the user has registered before!
             }
         } catch (SQLException ex) {
 //            Logger.getLogger(Sign_up.class.getName()).log(Level.SEVERE, null, ex);
@@ -210,36 +209,8 @@ public class Sign_up extends javax.swing.JFrame {
     private void jButton_loginMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton_loginMouseClicked
 
     }//GEN-LAST:event_jButton_loginMouseClicked
-    private boolean validEmail(String email){
-        Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(email);
-        return matcher.matches();
-    }
-    private boolean isRealEmail(String email){
-        try{
-            
-            URL url = new URL(API_URL + email + "&api_key=" + api_key );
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
-            int responseCode = connection.getResponseCode();
-            if (responseCode == 200){
-               Scanner scanner = new Scanner(url.openStream());
-                StringBuilder response = new StringBuilder();
-                while (scanner.hasNext()) {
-                    response.append(scanner.nextLine());
-                }
-                scanner.close();
-                
-                // Here, you'd parse the JSON response to check if the email is deliverable.
-                // This example assumes you check the JSON response field as per the API's documentation.
-                // For example, response might include a "result" field with values like "deliverable"
-                return response.toString().contains("\"result\":\"deliverable\"");
-                // How to work with JSON file in java
-            }
-        }catch(IOException e){
-            e.printStackTrace();
-        }
-        return false;
-    }
+   
+    
     /**
      * @param args the command line arguments
      */
