@@ -2,5 +2,5 @@
 ./DS_Store
 .idea/
 /target/
-**/credential.properties
-*.properties
+**/credentials.properties
+**/*.properties
