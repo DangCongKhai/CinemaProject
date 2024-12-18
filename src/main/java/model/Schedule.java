@@ -6,7 +6,7 @@ package model;
 
 //import java.util.SelectedDate;
 
-import com.raven.datechooser.SelectedDate;
+import datechooser.SelectedDate;
 
 
 /**
@@ -26,12 +26,25 @@ public class Schedule {
         return scheduleID;
     }
 
+    public void setScheduleID(int scheduleID) {
+        this.scheduleID = scheduleID;
+    }
+
     public int getScreen_number() {
         return screen_number;
     }
 
     public Schedule(int scheduleID, String title, SelectedDate show_date, String start_time, String end_time, long price, int screen_number) {
         this.scheduleID = scheduleID;
+        this.title = title;
+        this.show_date = show_date;
+        this.start_time = start_time;
+        this.end_time = end_time;
+        this.price = price;
+        this.screen_number = screen_number;
+    }
+    public Schedule(String title, SelectedDate show_date, String start_time, String end_time, long price, int screen_number) {
+        
         this.title = title;
         this.show_date = show_date;
         this.start_time = start_time;

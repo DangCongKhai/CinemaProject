@@ -1,5 +1,6 @@
 package main_view;
 
+import main_view.Admin;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import controller.LoginController;
 import java.sql.SQLException;
@@ -269,10 +270,15 @@ public class SignInFrame extends javax.swing.JFrame {
 //                    customer_view.setCustomer(user);
                 customer_view.setVisible(true);
                 this.setVisible(false);
-            }else{
+            }else if (role.equals("Admin")){
                 Admin admin_view = new Admin();
 //                    admin_view.setUser(user);
                 admin_view.setVisible(true);
+                this.setVisible(false);
+            }else{
+                User staff = sign_in_controller.getUser(account_id);
+                StaffView staff_view = new StaffView(staff);
+                staff_view.setVisible(true);
                 this.setVisible(false);
             }
         }
@@ -298,7 +304,7 @@ public class SignInFrame extends javax.swing.JFrame {
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         // TODO add your handling code here:
-        GuestView guest_view = new GuestView();
+       Guest guest_view = new Guest();
        guest_view.setVisible(true);
        this.setVisible(false);
     }//GEN-LAST:event_btnBackActionPerformed
@@ -306,18 +312,18 @@ public class SignInFrame extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        try {
-            UIManager.setLookAndFeel(new FlatIntelliJLaf());
-        } catch (UnsupportedLookAndFeelException e) {}
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new SignInFrame().setVisible(true);
-            }
-        });
-    }
+//    public static void main(String args[]) {
+//        try {
+//            UIManager.setLookAndFeel(new FlatIntelliJLaf());
+//        } catch (UnsupportedLookAndFeelException e) {}
+//
+//        /* Create and display the form */
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new SignInFrame().setVisible(true);
+//            }
+//        });
+//    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLayeredPane bg;

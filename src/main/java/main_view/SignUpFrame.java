@@ -18,7 +18,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 public class SignUpFrame extends javax.swing.JFrame {
     private static final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[\\w.+\\-]+@(gmail\\.com|\\w*.edu.vn)$", Pattern.CASE_INSENSITIVE);
-    private static final String api_key = "12d42e1d76da6625d532fb7eca3d1d570f6956a4";
+    
     private static final String API_URL = "https://api.hunter.io/v2/email-verifier?email=";
     private static SignUpController sign_up_controller = SignUpController.getInstance();
 
@@ -265,7 +265,7 @@ public class SignUpFrame extends javax.swing.JFrame {
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         // TODO add your handling code here:
-       GuestView guest_view = new GuestView();
+       Guest guest_view = new Guest();
        guest_view.setVisible(true);
        this.setVisible(false);
     }//GEN-LAST:event_btnBackActionPerformed
@@ -333,46 +333,46 @@ public class SignUpFrame extends javax.swing.JFrame {
         return matcher.matches();
     }
     private boolean isRealEmail(String email){
-        try{
-            
-            URL url = new URL(API_URL + email + "&api_key=" + api_key );
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
-            int responseCode = connection.getResponseCode();
-            if (responseCode == 200){
-               Scanner scanner = new Scanner(url.openStream());
-                StringBuilder response = new StringBuilder();
-                while (scanner.hasNext()) {
-                    response.append(scanner.nextLine());
-                }
-                scanner.close();
-                
-                // Here, you'd parse the JSON response to check if the email is deliverable.
-                // This example assumes you check the JSON response field as per the API's documentation.
-                // For example, response might include a "result" field with values like "deliverable"
-                return response.toString().contains("\"result\":\"deliverable\"");
-                // How to work with JSON file in java
-            }
-        }catch(IOException e){
-            e.printStackTrace();
-        }
+//        try{
+//            
+//            URL url = new URL(API_URL + email + "&api_key=" + api_key );
+//            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+//            connection.setRequestMethod("GET");
+//            int responseCode = connection.getResponseCode();
+//            if (responseCode == 200){
+//               Scanner scanner = new Scanner(url.openStream());
+//                StringBuilder response = new StringBuilder();
+//                while (scanner.hasNext()) {
+//                    response.append(scanner.nextLine());
+//                }
+//                scanner.close();
+//                
+//                // Here, you'd parse the JSON response to check if the email is deliverable.
+//                // This example assumes you check the JSON response field as per the API's documentation.
+//                // For example, response might include a "result" field with values like "deliverable"
+//                return response.toString().contains("\"result\":\"deliverable\"");
+//                // How to work with JSON file in java
+//            }
+//        }catch(IOException e){
+//            e.printStackTrace();
+//        }
         return false;
     }
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        try {
-            UIManager.setLookAndFeel(new FlatIntelliJLaf());
-        } catch (UnsupportedLookAndFeelException e) {}
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new SignUpFrame().setVisible(true);
-            }
-        });
-    }
+//    public static void main(String args[]) {
+//        try {
+//            UIManager.setLookAndFeel(new FlatIntelliJLaf());
+//        } catch (UnsupportedLookAndFeelException e) {}
+//
+//        /* Create and display the form */
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new SignUpFrame().setVisible(true);
+//            }
+//        });
+//    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLayeredPane bg;

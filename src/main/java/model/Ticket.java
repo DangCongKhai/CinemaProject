@@ -46,6 +46,13 @@ public class Ticket {
         this.total_price = total_price;
         this.customer = customer;
     }
+    public Ticket(java.sql.Timestamp  booking_date,User staff, String booking_status, long total_price) {
+      
+        this.booking_date = booking_date;
+        this.booking_status = booking_status;
+        this.total_price = total_price;
+        this.staff = staff;
+    }
 
     public int getTicketID() {
         return TicketID;

@@ -49,15 +49,42 @@ public class EmailSender {
         });
     }
     
-    public void sendEmail(Customer customer, Movie movie, Schedule schedule, ArrayList<SeatSchedule> seat_schedules_list){
-        String content = message_confirmation(movie, schedule,seat_schedules_list,customer);
+    public void sendEmail(Customer customer, Movie movie, Schedule schedule, ArrayList<SeatSchedule> seat_schedules_list, int ticketID, OrderFoodDrink food_order, OrderFoodDrink drink_order){
+        String content = message_confirmation(ticketID,movie, schedule,seat_schedules_list,customer.getName(), food_order,  drink_order);
        
         try {
             // Create a MIME-style Email
             Message message = new MimeMessage(session);
             
             message.setFrom(new InternetAddress(sender_email));
-            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse("dangcongkhai2k5@gmail.com"));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse("dangcongkhai2k5@gmail.com"));// This can be replace with email parameter if you have bought a domain
+            message.setSubject(subject);
+
+            MimeBodyPart mimeBodyPart = new MimeBodyPart();
+            mimeBodyPart.setContent(content, "text/html; charset=utf-8");
+
+            Multipart multipart = new MimeMultipart();
+            multipart.addBodyPart(mimeBodyPart);
+
+            message.setContent(multipart);
+
+            // Send Email
+            Transport.send(message);
+            System.out.println("Email sent successfully!");
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void sendEmailToGuest(Movie movie, Schedule schedule, ArrayList<SeatSchedule> seat_schedules_list, int ticketID, OrderFoodDrink food_order, OrderFoodDrink drink_order, String email, String name){
+        String content = message_confirmation(ticketID,movie, schedule,seat_schedules_list,name, food_order,  drink_order);
+       
+        try {
+            // Create a MIME-style Email
+            Message message = new MimeMessage(session);
+            
+            message.setFrom(new InternetAddress(sender_email));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse("dangcongkhai2k5@gmail.com")); // This can be replace with email parameter if you have bought a domain
             message.setSubject(subject);
 
             MimeBodyPart mimeBodyPart = new MimeBodyPart();
@@ -84,7 +111,7 @@ public class EmailSender {
 "            <p>Dear <b>%s</b>,</p>\n" +
 "            <p>Thank you for booking with us! Your ticket details are as follows:</p>\n" +
 "            <table border=\"1\" style=\"border-collapse: collapse; width:50% ;\">\n" +
-"                <tr style=\"background-color: #f2f2f2;\">\n" +
+"                <tr>\n" +
 "                    <th>Movie</th>\n" +
 "                    <td>%s</td>\n" +
 "                </tr>\n" +
@@ -135,13 +162,13 @@ public class EmailSender {
             e.printStackTrace();
         }
     }
-    public String message_confirmation(Movie movie, Schedule schedule, ArrayList<SeatSchedule> seat_schedules_list, Customer customer) {
+    public String message_confirmation(int ticketID, Movie movie, Schedule schedule, ArrayList<SeatSchedule> seat_schedules_list, String name, OrderFoodDrink food_order, OrderFoodDrink drink_order) {
     StringBuilder selected_seat_text = new StringBuilder();
     for (SeatSchedule ss : seat_schedules_list) {
         selected_seat_text.append(ss.getSeat_name().trim()).append(", ");
     }
     
-    // Remove trailing comma and space if seats exist
+
     if (selected_seat_text.length() > 0) {
         selected_seat_text.setLength(selected_seat_text.length() - 2);
     }
@@ -153,46 +180,63 @@ public class EmailSender {
         <body>
             <h2 style="color: #2E86C1;">Booking Confirmation - Cinema KKTN</h2>
             <p>Dear <b>%s</b>,</p>
-            <p>Thank you for booking with us! Your ticket details are as follows:</p> """, customer.getName()) +
+            <p>Thank you for booking with us! Your ticket details are as follows:</p> """, name) +
             """ 
             <table border="1" style="border-collapse: collapse; width: 50%;">
             """ + String.format("""
-                                                                                       
-                <tr style="background-color: #f2f2f2;">
-                    <th>Movie</th>
-                    <td>%s</td>
+                
+                <tr >
+                    <th style="text-align: center; vertical-align: middle;">TicketID</th>
+                    <td style="text-align: center; vertical-align: middle;">%d</td>
+                </tr>                                                                             
+                <tr >
+                    <th style="text-align: center; vertical-align: middle;">Movie</th>
+                    <td style="text-align: center; vertical-align: middle;">%s</td>
                 </tr>
                 <tr>
-                    <th>Date</th>
-                    <td>%s</td>
+                    <th style="text-align: center; vertical-align: middle;">Date</th>
+                    <td style="text-align: center; vertical-align: middle;">%s</td>
                 </tr>
-                <tr style="background-color: #f2f2f2;">
-                    <th>Time</th>
-                    <td>%s - %s</td>
+                <tr >
+                    <th style="text-align: center; vertical-align: middle;">Time</th>
+                    <td style="text-align: center; vertical-align: middle;" >%s - %s</td>
                 </tr>
                 <tr>
-                    <th>Room</th>
-                    <td>%d</td>
+                    <th style="text-align: center; vertical-align: middle;">Room</th>
+                    <td style="text-align: center; vertical-align: middle;">%d</td>
                 </tr>                      
                 <tr>
-                    <th>Seats</th>
-                    <td>%s</td>
+                    <th style="text-align: center; vertical-align: middle;">Seats</th>
+                    <td  style="text-align: center; vertical-align: middle;">%s</td>
                 </tr>
-               
+               """,ticketID,
+                    movie.getTitle(), 
+                    schedule.getShow_date().toString(), 
+                    schedule.getStart_time(), 
+                    schedule.getEnd_time(), 
+                    schedule.getScreen_number(), 
+                    selected_seat_text.toString()
+                );
+        if (food_order.getQuantity() > 0){
+            message+= String.format("<tr>\n" +
+"                    <th style=\"text-align: center; vertical-align: middle;\">Food</th>\n" +
+"                    <td  style=\"text-align: center; vertical-align: middle;\">%d popcorn</td>\n" +
+"                </tr>", food_order.getQuantity()) +"<hr>";
+        }
+        if (drink_order.getQuantity() > 0){
+            message+= String.format("<tr>\n" +
+"                    <th style=\"text-align: center; vertical-align: middle;\">Drink</th>\n" +
+"                    <td  style=\"text-align: center; vertical-align: middle;\">%d drink</td>\n" +
+"                </tr>", drink_order.getQuantity()) +"<hr>";
+        }                             
+        message+="""      
             </table>
             <p>Please arrive 15 minutes early. Enjoy your movie!</p>
             <p style="color: #555;">Best regards,</p>
             <p><b>Cinema KKTN Customer Support</b></p>
         </body>
         </html>
-        """,
-        movie.getTitle(), 
-        schedule.getShow_date().toString(), 
-        schedule.getStart_time(), 
-        schedule.getEnd_time(), 
-        schedule.getScreen_number(), 
-        selected_seat_text.toString()
-    );
+        """;
 
     return message;
 }

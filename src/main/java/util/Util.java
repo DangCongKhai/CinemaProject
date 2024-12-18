@@ -35,7 +35,7 @@ import org.quartz.impl.StdSchedulerFactory;
  */
 public class Util {
     private static final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[\\w.+\\-]+@(gmail\\.com|\\w*.edu.vn)$", Pattern.CASE_INSENSITIVE);
-    private static final String api_key = "";
+    private static final String api_key = getAPIKey();
     private static final String API_URL = "https://api.hunter.io/v2/email-verifier?email=";
     private static Connection conn = Database.getInstance();
     public static int intInput(String text) throws NumberFormatException{
@@ -167,7 +167,7 @@ public class Util {
                 .withIdentity("cleanupTrigger", "group1")
                 .startNow()
                 .withSchedule(SimpleScheduleBuilder.simpleSchedule()
-                        .withIntervalInSeconds(60) // Check every 60 seconds
+                        .withIntervalInSeconds(5) // Check every 60 seconds
                         .repeatForever())
                 .build();
 

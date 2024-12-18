@@ -4,7 +4,7 @@
  */
 package controller;
 
-import com.raven.datechooser.SelectedDate;
+import datechooser.SelectedDate;
 import database.Database;
 import java.io.File;
 import java.io.FileInputStream;
@@ -49,29 +49,43 @@ public class AdminController {
         return admin_controller;
     }
     
-    public boolean addMovie(Movie new_movie){
+    public Movie addMovie(Movie new_movie){
         
-
-        String query = "INSERT INTO Movie(MovieID, Title, Genre, Duration, Actor, Description, Image)"
-                + "VALUES ( ?, ?,?,?,?, ?, ?)";
+        Movie returned_movie = null;
+        String query = "INSERT INTO Movie(Title, Genre, Duration, Actor, Description, Image)" + 
+							         "VALUES (?, ?, ?, ?, ?, ?)";
         try {
-            PreparedStatement pstm = conn.prepareStatement(query);
-            pstm.setInt(1, new_movie.getMovieID());
-            pstm.setString(2, new_movie.getTitle());
-            pstm.setString(3, new_movie.getGenre());
-            pstm.setInt(4, new_movie.getDuration());
-            pstm.setString(5, new_movie.getActor());
-            pstm.setString(6, new_movie.getDescription());
-            pstm.setBytes(7, new_movie.getImage());
+            if (conn == null || conn.isClosed()) {
+                System.out.println("Database connection is not available.");
+                return returned_movie;
+            }            
             
-            int row = pstm.executeUpdate();
-            if (row > 0){
-                return true;
+            PreparedStatement pstm = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            pstm.setString(1, new_movie.getTitle());
+            pstm.setString(2, new_movie.getGenre());
+            pstm.setInt(3, new_movie.getDuration());
+            pstm.setString(4, new_movie.getActor());
+            pstm.setString(5, new_movie.getDescription());
+            pstm.setBytes(6, new_movie.getImage());
+            
+            pstm.executeUpdate();
+            
+            ResultSet result_key = pstm.getGeneratedKeys();
+            if (result_key.next()){
+                int key = result_key.getInt(1);
+                returned_movie = new Movie(key, new_movie.getTitle(), new_movie.getGenre(), new_movie.getDuration(), new_movie.getActor(), new_movie.getDescription(), new_movie.getImage());
+                return returned_movie;
             }
+            
+        } catch (SQLException ex) {
+//            Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("SQL Exception: " + ex.getMessage());
         } catch (Exception ex) {
 //            Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Exception: " + ex.getMessage());
         }
-        return false;
+        return returned_movie;
+        
     }
     
     public ArrayList<Movie> getExistingMovie(){
@@ -187,9 +201,10 @@ public class AdminController {
         return result;
     }
     
-    public boolean insertSchedule(Schedule schedule){
+    public Schedule insertSchedule(Schedule schedule){
         // Get information that can be overlapped
         // Get screen
+        Schedule returned_schedule = null;
         int screen_number = schedule.getscreen_number();
         
         // Get start time and end time
@@ -216,24 +231,30 @@ public class AdminController {
             overlapped_result = pstm.executeQuery();
             
             if (!overlapped_result.next()){
-                        
-                String query = "INSERT INTO Schedule (ScheduleID, ShowDate, StartTime, EndTime, Price, MovieID, ScreenID)\n" +
-                                "VALUES (?, ?, ?, ?, ?, (SELECT MovieID FROM Movie where Title = ?), (SELECT ScreenID FROM Screen where ScreenNumber = ?))";
+                String query = "INSERT INTO Schedule (ShowDate, StartTime, EndTime, Price, MovieID, ScreenID)\n" +
+                                "VALUES (?, ?, ?, ?, (SELECT MovieID FROM Movie where Title = ?), (SELECT ScreenID FROM Screen where ScreenNumber = ?))";
                 int res;
-                try{
-                   PreparedStatement insert_pstm = conn.prepareStatement(query);
-                   insert_pstm.setInt(1, schedule.getScheduleID());
-                    insert_pstm.setDate(2, sql_date);
-                    insert_pstm.setInt(3, start_time);
-                    insert_pstm.setInt(4, end_time);
-                    insert_pstm.setLong(5, schedule.getPrice());
-                    insert_pstm.setString(6, schedule.getTitle());
-                    insert_pstm.setInt(7, screen_number);
+                
+                try {
+                   PreparedStatement insert_pstm = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+//                    insert_pstm.setInt(1, schedule.getScheduleID());
+                    insert_pstm.setDate(1, sql_date);
+                    insert_pstm.setInt(2, start_time);
+                    insert_pstm.setInt(3, end_time);
+                    insert_pstm.setLong(4, schedule.getPrice());
+                    insert_pstm.setString(5, schedule.getTitle());
+                    insert_pstm.setInt(6, screen_number);
                     res = insert_pstm.executeUpdate();
                   
-                    if (res == 1){
-                        return true;
+                    
+                    ResultSet key_result = insert_pstm.getGeneratedKeys();
+                    if (key_result.next()){
+                        int schedule_id_generated = key_result.getInt(1);
+//                         Schedule(int scheduleID, String title, SelectedDate show_date, String start_time, String end_time, long price, int screen_number)
+                        returned_schedule = new Schedule(schedule_id_generated, schedule.getTitle(), show_date, schedule.getStart_time(), schedule.getEnd_time(), schedule.getPrice(), schedule.getScreen_number());
+                        return returned_schedule;
                     }
+                        
                 }catch (SQLException e){
                     System.out.println(e.getMessage());
                 }   
@@ -244,8 +265,64 @@ public class AdminController {
             System.out.println("Exception :"+ ex.getMessage());
 //            Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
         }   
+        return returned_schedule;
+    }
+    
+    public boolean updateNewSchedule(Schedule old_schedule, Schedule new_schedule){
+        
+        // Check if updated schedule is valid or not
+        try {
+            int screen_number = new_schedule.getscreen_number();
+
+            // Get start time and end time
+            LocalTime startTime = LocalTime.parse(new_schedule.getStart_time());
+            LocalTime endTime = LocalTime.parse(new_schedule.getEnd_time());
+
+            int start_time = startTime.getHour() * 60 + startTime.getMinute();
+            int end_time = endTime.getHour() * 60 + endTime.getMinute();
+
+            // Get show date
+            SelectedDate show_date = new_schedule.getShow_date();
+            LocalDate releaseDate = LocalDate.of(show_date.getYear(), show_date.getMonth(), show_date.getDay());
+            java.sql.Date sql_date = java.sql.Date.valueOf(releaseDate);
+
+            String check_overlapped_schedule_query = "SELECT * FROM Schedule WHERE "
+                    + " ((StartTime > ? AND StartTime - 30 < ?) OR (StartTime <= ? AND EndTime + 30 > ?)) AND ScreenID = (SELECT ScreenID from Screen WHERE ScreenNumber = ?) AND ShowDate = ? AND ScheduleID != ?";
+
+            ResultSet overlapped_result = null;
+
+            PreparedStatement pstm = conn.prepareStatement(check_overlapped_schedule_query);
+            pstm.setInt(1, start_time); pstm.setInt(2, end_time); 
+            pstm.setInt(3, start_time); pstm.setInt(4, start_time);
+            pstm.setInt(5, screen_number); pstm.setDate(6, sql_date);
+            pstm.setInt(7, old_schedule.getScheduleID());
+            overlapped_result = pstm.executeQuery();
+            if (!overlapped_result.next()){
+                String update_new_schedule_query = "UPDATE Schedule \n" +
+                                                    "SET ShowDate = ?, StartTime = ?, EndTime = ?, Price = ?, MovieID = (SELECT MovieID FROM Movie where Title = ?), ScreenID = (SELECT ScreenID FROM Screen where ScreenNumber = ?)\n" +
+                                                    "WHERE ScheduleID = ?";
+                PreparedStatement update_pstm = conn.prepareStatement(update_new_schedule_query);
+                update_pstm.setDate(1, sql_date);
+                update_pstm.setInt(2, start_time);
+                update_pstm.setInt(3, end_time);
+                update_pstm.setLong(4, new_schedule.getPrice());
+                update_pstm.setString(5, new_schedule.getTitle());
+                update_pstm.setInt(6, screen_number);
+                update_pstm.setInt(7, old_schedule.getScheduleID());
+                int row = update_pstm.executeUpdate();
+                if (row > 0){
+                    return true;
+                }
+            }
+        }catch (SQLException e){
+            System.out.println("Error while updating schedule");
+            System.out.println(e.getMessage());
+        }
+
+       
         return false;
     }
+    
     public Schedule getScheduleFromResultSet(ResultSet result){
         try {
             int scheduleID = result.getInt("ScheduleID");

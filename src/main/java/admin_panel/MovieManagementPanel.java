@@ -3,10 +3,16 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package admin_panel;
+//import com.raven.swing.table.ModelAction;
+//import com.raven.swing.table.ModelProfile;
+//import com.raven.swing.table.Profile;
+import cms.component.TableHeader;
 import controller.AdminController;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -23,7 +29,9 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import model.Movie;
 import static util.Util.intInput;
 /**
@@ -41,28 +49,72 @@ public class MovieManagementPanel extends javax.swing.JPanel {
     private static String original_duration = "";
     private static String original_actor = "";
     private static String original_description = "";
+    private static DocumentListener docListener;
+    
     /**
      * Creates new form P2_MovieManagement
      */
     public MovieManagementPanel() {
-       
+        initializeDocListener();
         initComponents();
-        
-      
         
         movies_list = admin_controller.getExistingMovie();
         for (Movie movie : movies_list){ 
             movies_set.add(movie.getTitle());
-            Object[] row = {movie.getTitle(), movie.getGenre(), String.valueOf(movie.getDuration()), movie.getActor(), movie.getDescription() };
+            Object[] row = {movie.getTitle(), movie.getGenre(), String.valueOf(movie.getDuration()), movie.getActor(), movie.getDescription()};
             tableModel.addRow(row);
         }
+        table.setShowHorizontalLines(true);
+        table.setGridColor(new Color(230, 230, 230));
+        table.getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable jtable, Object o, boolean bln, boolean bln1, int row, int col) {
+                TableHeader header = new TableHeader(o + "");
+
+                  header.setHorizontalAlignment(JLabel.CENTER);
+
+                return header;
+            }
+        });
+        table.setFont(new Font("Arial", Font.PLAIN, 16));
         
+        table.setRowHeight(40);
+        table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable jtable, Object o, boolean selected, boolean focus, int row, int col) {
+
+                JTextArea com = new JTextArea(o.toString());
+                com.setLineWrap(true);  // Enable text wrapping
+                com.setWrapStyleWord(true);  // Wrap at word boundaries
+                com.setOpaque(true);
+                
+                setBorder(noFocusBorder);
+                int rowHeight = com.getHeight();
+                if (table.getRowHeight(row) < rowHeight) {
+                    table.setRowHeight(row, rowHeight + 10);
+                }
+                
+                com.setForeground(new Color(102, 102, 102));
+                
+                
+                if (selected) {
+                    com.setBackground(new Color(239, 244, 255));
+                } else {
+                    com.setBackground(Color.WHITE);
+                }
+                return com;
+                
+            }
+        }
+        );
         table.setModel(tableModel);
+        // Custom Renderer Class
+    
         bt_update.setEnabled(false);
         bt_delete.setEnabled(false);
-        addTextFieldListeners();
+        
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -85,12 +137,13 @@ public class MovieManagementPanel extends javax.swing.JPanel {
         tf_genre = new javax.swing.JTextField();
         tf_actor = new javax.swing.JTextField();
         tf_duration = new javax.swing.JTextField();
-        bt_add = new javax.swing.JButton();
-        bt_delete = new javax.swing.JButton();
-        bt_update = new javax.swing.JButton();
-        bt_clear = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
         tf_description = new javax.swing.JTextField();
+        jPanel3 = new javax.swing.JPanel();
+        bt_add = new javax.swing.JButton();
+        bt_update = new javax.swing.JButton();
+        bt_delete = new javax.swing.JButton();
+        bt_clear = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
@@ -98,7 +151,7 @@ public class MovieManagementPanel extends javax.swing.JPanel {
         jScrollPane2.setViewportView(jEditorPane1);
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
+        jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         lb_poster.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lb_poster.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -132,6 +185,11 @@ public class MovieManagementPanel extends javax.swing.JPanel {
         jLabel5.setFont(new java.awt.Font("Helvetica Neue", 1, 12)); // NOI18N
         jLabel5.setText("Actor");
 
+        jLabel8.setFont(new java.awt.Font("Helvetica Neue", 1, 12)); // NOI18N
+        jLabel8.setText("Description");
+
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+
         bt_add.setBackground(new java.awt.Color(223, 177, 96));
         bt_add.setFont(new java.awt.Font("Helvetica Neue", 1, 12)); // NOI18N
         bt_add.setText("Add");
@@ -139,16 +197,6 @@ public class MovieManagementPanel extends javax.swing.JPanel {
         bt_add.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bt_addActionPerformed(evt);
-            }
-        });
-
-        bt_delete.setBackground(new java.awt.Color(223, 177, 96));
-        bt_delete.setFont(new java.awt.Font("Helvetica Neue", 1, 12)); // NOI18N
-        bt_delete.setText("Delete");
-        bt_delete.setBorder(null);
-        bt_delete.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bt_deleteActionPerformed(evt);
             }
         });
 
@@ -162,6 +210,16 @@ public class MovieManagementPanel extends javax.swing.JPanel {
             }
         });
 
+        bt_delete.setBackground(new java.awt.Color(223, 177, 96));
+        bt_delete.setFont(new java.awt.Font("Helvetica Neue", 1, 12)); // NOI18N
+        bt_delete.setText("Delete");
+        bt_delete.setBorder(null);
+        bt_delete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bt_deleteActionPerformed(evt);
+            }
+        });
+
         bt_clear.setBackground(new java.awt.Color(223, 177, 96));
         bt_clear.setFont(new java.awt.Font("Helvetica Neue", 1, 12)); // NOI18N
         bt_clear.setText("Clear");
@@ -172,59 +230,78 @@ public class MovieManagementPanel extends javax.swing.JPanel {
             }
         });
 
-        jLabel8.setFont(new java.awt.Font("Helvetica Neue", 1, 12)); // NOI18N
-        jLabel8.setText("Description");
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(bt_add, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(bt_clear, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(121, 121, 121))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(bt_update, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(bt_delete, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(35, 35, 35))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(bt_update, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bt_add, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bt_delete, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(bt_clear, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(23, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(bt_clear, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(bt_add, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(33, 33, 33)
-                        .addComponent(bt_update, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(bt_delete, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(21, 21, 21))
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(40, 40, 40)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(tf_title, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(tf_genre, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(tf_duration, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(tf_actor, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(tf_description, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(121, 121, 121)
-                        .addComponent(lb_poster, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
-                        .addGap(102, 102, 102)))
-                .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(bt_import, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(126, 126, 126))
+                .addContainerGap(81, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(19, 19, 19))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(lb_poster, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(126, 126, 126))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(bt_import, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(109, 109, 109))))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(tf_description)
+                    .addComponent(tf_actor)
+                    .addComponent(tf_duration)
+                    .addComponent(tf_genre)
+                    .addComponent(tf_title, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lb_poster, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addGap(12, 12, 12)
+                .addComponent(lb_poster, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(bt_import, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(tf_title, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
@@ -245,15 +322,12 @@ public class MovieManagementPanel extends javax.swing.JPanel {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel8)
                             .addComponent(tf_description, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(bt_add, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(bt_delete, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(bt_update, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(bt_clear, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(14, Short.MAX_VALUE))
         );
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
         table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -289,8 +363,8 @@ public class MovieManagementPanel extends javax.swing.JPanel {
     jPanel1Layout.setHorizontalGroup(
         jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-            .addGap(0, 0, Short.MAX_VALUE)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addContainerGap()
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 609, Short.MAX_VALUE))
     );
     jPanel1Layout.setVerticalGroup(
         jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -325,7 +399,7 @@ public class MovieManagementPanel extends javax.swing.JPanel {
                 BufferedImage buffered_image = ImageIO.read(image_file);
                 
                 ImageIcon imageIcon = new ImageIcon(buffered_image);
-                Image image = imageIcon.getImage().getScaledInstance(lb_poster.getWidth(), lb_poster.getHeight(), Image.SCALE_SMOOTH);
+                Image image = imageIcon.getImage().getScaledInstance(196, 196, Image.SCALE_SMOOTH);
                 ImageIcon new_icon = new ImageIcon(image);
                 lb_poster.setIcon(new_icon);
                 
@@ -399,14 +473,16 @@ public class MovieManagementPanel extends javax.swing.JPanel {
         } catch (IOException ex) {
 //            Logger.getLogger(MovieManagementPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
-        Movie new_movie = new Movie(tableModel.getRowCount() + 1,title, genre, duration, actor, description, image);
-        movies_list.add(new_movie);
-        if(admin_controller.addMovie(new_movie)){
+        Movie new_movie = new Movie(title, genre, duration, actor, description, image);
+        Movie returned_movie = admin_controller.addMovie(new_movie);
+        if(!returned_movie.equals(null)){
+            movies_list.add(returned_movie);
             JOptionPane.showMessageDialog(this, String.format("Successful adding %s to the database", title), "Status", JOptionPane.PLAIN_MESSAGE);
             
         }else{
             JOptionPane.showMessageDialog(this, String.format("%s is exist in the database", title), "Status", JOptionPane.PLAIN_MESSAGE);
         }
+        clear();
     }//GEN-LAST:event_bt_addActionPerformed
 
     private void bt_deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_deleteActionPerformed
@@ -492,9 +568,15 @@ public class MovieManagementPanel extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, String.format("%s is failed to be updated", title), "Status", JOptionPane.PLAIN_MESSAGE);
         }
         
+        bt_add.setEnabled(true);
+        bt_update.setEnabled(false);
+        
+        clear();
+        
     }//GEN-LAST:event_bt_updateActionPerformed
-    private void addTextFieldListeners() {
-    DocumentListener docListener = new DocumentListener() {
+    private void initializeDocListener(){
+        if (docListener == null) { 
+        docListener = new DocumentListener() {
         @Override
         public void insertUpdate(DocumentEvent e) {
             checkForChanges();
@@ -509,14 +591,24 @@ public class MovieManagementPanel extends javax.swing.JPanel {
         public void changedUpdate(DocumentEvent e) {
             checkForChanges();
         }
-    };
-
+        };
+        }
+    }
+    private void addTextFieldListeners() {
     tf_title.getDocument().addDocumentListener(docListener);
     tf_genre.getDocument().addDocumentListener(docListener);
     tf_duration.getDocument().addDocumentListener(docListener);
     tf_actor.getDocument().addDocumentListener(docListener);
     tf_description.getDocument().addDocumentListener(docListener);
 }
+    private void removeTextFieldListeners(){
+    tf_title.getDocument().removeDocumentListener(docListener);
+    tf_genre.getDocument().removeDocumentListener(docListener);
+    tf_duration.getDocument().removeDocumentListener(docListener);
+    tf_actor.getDocument().removeDocumentListener(docListener);
+    tf_description.getDocument().removeDocumentListener(docListener);
+    
+    }
 
 private void checkForChanges() {
     // Compare current values with original values
@@ -525,7 +617,7 @@ private void checkForChanges() {
                         !tf_duration.getText().equals(original_duration) ||
                         !tf_actor.getText().equals(original_actor) ||
                         !tf_description.getText().equals(original_description);
-
+    
     // Enable or disable the Update button
     bt_update.setEnabled(isChanged);
 }
@@ -534,6 +626,7 @@ private void checkForChanges() {
         // TODO add your handling code here:
         clear();
         bt_delete.setEnabled(false);
+        bt_add.setEnabled(true);
     }//GEN-LAST:event_bt_clearActionPerformed
     private void clear(){
         tf_title.setText("");
@@ -547,6 +640,8 @@ private void checkForChanges() {
         original_actor = "";
         original_description = "";
         lb_poster.setIcon(null);
+        removeTextFieldListeners();
+        bt_add.setVisible(true);
     }
     private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked
         // TODO add your handling code here:
@@ -554,7 +649,7 @@ private void checkForChanges() {
         bt_update.setEnabled(false);
         original_title = (String) tableModel.getValueAt(selected_row, 0);
         original_genre = (String) tableModel.getValueAt(selected_row, 1);              
-        original_duration = (String) tableModel.getValueAt(selected_row, 2);
+        original_duration =  String.valueOf(tableModel.getValueAt(selected_row, 2));
         original_actor = (String) tableModel.getValueAt(selected_row, 3);
         original_description = (String) tableModel.getValueAt(selected_row, 4);
         
@@ -568,16 +663,16 @@ private void checkForChanges() {
         try {
             BufferedImage buffered_image = ImageIO.read(input);
             ImageIcon imageIcon = new ImageIcon(buffered_image);
-                Image image = imageIcon.getImage().getScaledInstance(lb_poster.getWidth(), lb_poster.getHeight(), Image.SCALE_SMOOTH);
+                Image image = imageIcon.getImage().getScaledInstance(150, 170, Image.SCALE_SMOOTH);
                 lb_poster.setIcon(new ImageIcon(image));
         } catch (IOException ex) {
 //            Logger.getLogger(MovieManagementPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
         bt_delete.setEnabled(true);
-        
-        
+        bt_add.setEnabled(false);
+        addTextFieldListeners();
     }//GEN-LAST:event_tableMouseClicked
-
+    
     private void lb_posterPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_lb_posterPropertyChange
         // TODO add your handling code here:
         if (lb_poster.getIcon() == null){
@@ -601,6 +696,7 @@ private void checkForChanges() {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lb_poster;

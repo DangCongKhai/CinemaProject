@@ -4,7 +4,7 @@
  */
 package controller;
 
-import com.raven.datechooser.SelectedDate;
+import datechooser.SelectedDate;
 import database.Database;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -152,24 +152,30 @@ public class GuestController {
     public FoodDrink getFoodDrinkByName(String name){
         String query = "SELECT * FROM FoodDrink WHERE Name = ?";
         FoodDrink food_drink = null;
-        PreparedStatement pstm;
-        try {
-            pstm = conn.prepareStatement(query);
-            pstm.setString(1, name);
-            
-            ResultSet result = pstm.executeQuery();
-            while (result.next()){
-                int food_drink_ID = result.getInt("FoodDrinkID");
-                String type = result.getString("Type");
-                long price = result.getLong("Price");
-                String description = result.getString("Description");
-                food_drink = new FoodDrink(food_drink_ID,name, type, price, description);
-            }
-        } catch (SQLException ex) {
-            System.out.println("Error while getting food drink");
-            System.out.println(ex.getMessage());
-//            Logger.getLogger(GuestController.class.getName()).log(Level.SEVERE, null, ex);
+        if (name.equals("Popcorn")){
+            food_drink = new FoodDrink(1, "Popcorn", "Food", 50000, "Food");
+        }else{
+            food_drink = new FoodDrink(2, "Drink", "Drink", 40000, "Drink");
         }
+        // Here is for future enhancement
+//        PreparedStatement pstm;
+//        try {
+//            pstm = conn.prepareStatement(query);
+//            pstm.setString(1, name);
+//            
+//            ResultSet result = pstm.executeQuery();
+//            while (result.next()){
+//                int food_drink_ID = result.getInt("FoodDrinkID");
+//                String type = result.getString("Type");
+//                long price = result.getLong("Price");
+//                String description = result.getString("Description");
+//                food_drink = new FoodDrink(food_drink_ID,name, type, price, description);
+//            }
+//        } catch (SQLException ex) {
+//            System.out.println("Error while getting food drink");
+//            System.out.println(ex.getMessage());
+////            Logger.getLogger(GuestController.class.getName()).log(Level.SEVERE, null, ex);
+//        }
         
         return food_drink;
 

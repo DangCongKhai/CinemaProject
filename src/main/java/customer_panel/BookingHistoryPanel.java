@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import model.Customer;
 
 /**
  *
@@ -13,14 +14,18 @@ import java.sql.Statement;
  */
 public class BookingHistoryPanel extends javax.swing.JPanel {
     private static Connection conn = Database.getInstance();
+    private Customer customer;
+    private String username;
     /**
      * Creates new form UserHistoryViewForm
      */
-    public BookingHistoryPanel() {
+    public BookingHistoryPanel(Customer customer) {
+        this.customer = customer;
+        
         initComponents();
     }
     
-    private String username = "Rehan Rich"; // chỗ này mình viết cái function getUsername rồi thay zô đây là okayyy
+    // chỗ này mình viết cái function getUsername rồi thay zô đây là okayyy
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -57,7 +62,7 @@ public class BookingHistoryPanel extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Booking Date", "Booking Status", "Total Price", "Movie Title", "Booking Type"
+                "Booking Date", "Booking Type", "Total Price", "Movie Title", "Booking Status"
             }
         ));
         tbHistory.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -236,11 +241,11 @@ public class BookingHistoryPanel extends javax.swing.JPanel {
                         "SELECT t.BookingDate, t.BookingType, t.TotalPrice, m.Title AS MovieTitle, t.BookingStatus " +
                         "FROM Ticket t " +
                         "JOIN TicketSeat ts ON t.TicketID = ts.TicketID " +
-                        "JOIN SeatSchedule ss ON ts.ScheduleSeatID = ss.ScheduleSeatID " +
+                        "JOIN SeatSchedule ss ON ts.SeatScheduleID = ss.SeatScheduleID " +
                         "JOIN Schedule s ON ss.ScheduleID = s.ScheduleID " +
                         "JOIN Movie m ON s.MovieID = m.MovieID " +
-                        "JOIN Customer c ON t.CustomerID = c.CustomerID " +
-                        "WHERE c.Name = '" + username + "'";
+                        "JOIN [User] u ON t.CustomerID = u.UserID " +
+                        "WHERE u.Name = '" + customer.getName() + "'";
             
             Statement pstm = conn.createStatement();
             ResultSet result = pstm.executeQuery(query);
@@ -280,11 +285,11 @@ public class BookingHistoryPanel extends javax.swing.JPanel {
                 "SELECT t.BookingDate, t.BookingType, t.TotalPrice, m.Title AS MovieTitle, t.BookingStatus " +
                 "FROM Ticket t " +
                 "JOIN TicketSeat ts ON t.TicketID = ts.TicketID " +
-                "JOIN SeatSchedule ss ON ts.ScheduleSeatID = ss.ScheduleSeatID " +
+                "JOIN SeatSchedule ss ON ts.SeatScheduleID = ss.SeatScheduleID " +
                 "JOIN Schedule s ON ss.ScheduleID = s.ScheduleID " +
                 "JOIN Movie m ON s.MovieID = m.MovieID " +
-                "JOIN Customer c ON t.CustomerID = c.CustomerID " +
-                "WHERE c.Name = '" + username + "'";
+                "JOIN [User] u ON t.CustomerID = u.UserID " +
+                "WHERE u.Name = '" + customer.getName() + "'";
 
             if (!tfBookingDate.getText().trim().isEmpty()) {
                 query += " AND t.BookingDate LIKE '%" + tfBookingDate.getText().trim() + "%'";
@@ -330,6 +335,7 @@ public class BookingHistoryPanel extends javax.swing.JPanel {
             "Error occurred while searching: " + e.getMessage(),
             "Error",
             javax.swing.JOptionPane.ERROR_MESSAGE);
+            
         }
     }
 

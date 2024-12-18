@@ -28,6 +28,15 @@ public class Movie {
         this.actor = actor;
         this.image = image;
     }
+    public Movie(String title, String genre, int duration,String actor, String description, byte[] image) {
+   
+        this.title = title;
+        this.genre = genre;
+        this.duration = duration;
+        this.description = description;
+        this.actor = actor;
+        this.image = image;
+    }
 
     public void setMovieID(int movieID) {
         this.movieID = movieID;

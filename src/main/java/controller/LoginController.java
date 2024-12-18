@@ -83,8 +83,7 @@ public final class LoginController {
                         account_id = rs.getInt("AccountID");
                     }
                 }else{
-                //            String prefix = "{bcrypt}";
-                //            String hash_pw = rs.getString("password").substring(prefix.len)
+                
                 if (verifyPassword(password, rs.getString("password"))){
                     account_id = rs.getInt("AccountID");
                 }
@@ -100,9 +99,8 @@ public final class LoginController {
     }
     
     public String getRole(int account_id){
-        String query = "SELECT [User].*, Role from [User]\n" +
-                        "JOIN Account ON [User].[AccountID] = Account.AccountID\n" +
-                        "WHERE Account.AccountID = ?";
+        String query = "select Role from Account\n" +
+                            "WHERE AccountID = ? ";
         
         User user = null;
         String role = null;
@@ -112,8 +110,6 @@ public final class LoginController {
             ResultSet result = statement.executeQuery();
             if (result.next()){
                 role = result.getString("Role");
-               
-                
             }
         } catch (SQLException ex) {
                 System.out.println("Exception occured while getting role");

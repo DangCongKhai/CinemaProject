@@ -5,6 +5,7 @@
 package customer_panel;
 
 import controller.CustomerController;
+import main_view.Guest;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -27,7 +28,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import main_view.CustomerView;
-import main_view.GuestView;
+
+import main_view.StaffView;
 import model.Movie;
 
 /**
@@ -37,7 +39,8 @@ import model.Movie;
 public class MovieDisplayPanel extends javax.swing.JPanel {
     private static CustomerController customer_controller = CustomerController.getInstance();
     private CustomerView customer_view;
-    private GuestView guest_view;
+    private Guest my_guest;
+    private StaffView staff_view;
     ArrayList<Movie> movies_list = customer_controller.getMovies();
     private JPanel temp_panel;
     private JScrollPane scrollPane;
@@ -47,13 +50,28 @@ public class MovieDisplayPanel extends javax.swing.JPanel {
     public MovieDisplayPanel() {
         initComponents();
     }
-    
-    public MovieDisplayPanel(GuestView frame) {
-        this.guest_view = frame;
+     public MovieDisplayPanel(StaffView frame) {
+        this.staff_view = frame;
         initComponents();
         this.add(search_panel, BorderLayout.NORTH);
         temp_panel = moviesPanel;
         
+    }
+    
+    
+    public MovieDisplayPanel(Guest frame) {
+        this.my_guest = frame;
+        initComponents();
+        this.add(search_panel, BorderLayout.NORTH);
+        temp_panel = moviesPanel;
+        
+    }
+    
+    public MovieDisplayPanel(CustomerView frame){
+        this.customer_view = frame;
+        initComponents();
+        this.add(search_panel, BorderLayout.NORTH);
+        temp_panel = moviesPanel;
     }
     
     
@@ -101,14 +119,18 @@ public class MovieDisplayPanel extends javax.swing.JPanel {
         panel.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                if (customer_view == null){
-                    guest_view.showMovieInfo(movie);
+                
+                if (my_guest != null){
+                    my_guest.getMainForm().showForm(new MovieInfoPanel(my_guest, movie));
+                  
+                }else if(customer_view != null){
+                    customer_view.getMainForm().showForm(new MovieInfoPanel(customer_view, movie));             
                 }else{
-                    customer_view.showMovieInfo(movie);
+                    staff_view.getMainForm().showForm(new MovieInfoPanel(staff_view, movie));
                 }
                 
-            }
-        });
+
+        } });
         return panel;
     }
     
@@ -121,6 +143,7 @@ public class MovieDisplayPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jMonthChooser1 = new com.toedter.calendar.JMonthChooser();
         search_panel = new javax.swing.JPanel();
         tf_search = new cms.component.SearchTextField();
         moviesPanel = new javax.swing.JPanel();
@@ -132,6 +155,8 @@ public class MovieDisplayPanel extends javax.swing.JPanel {
         search_panel.setLayout(new java.awt.BorderLayout());
 
         tf_search.setText("Search movie here...");
+        tf_search.setMinimumSize(new java.awt.Dimension(64, 30));
+        tf_search.setPreferredSize(new java.awt.Dimension(131, 30));
         tf_search.setPrefixIcon(new javax.swing.ImageIcon(System.getProperty("user.dir") + "/src/main/image_folder/loupe.png"));
         tf_search.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -169,7 +194,7 @@ public class MovieDisplayPanel extends javax.swing.JPanel {
                 .addComponent(search_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(moviesPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 581, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 21, Short.MAX_VALUE))
+                .addGap(0, 18, Short.MAX_VALUE))
         );
 
         GridBagConstraints gbc = new GridBagConstraints();
@@ -283,6 +308,7 @@ public class MovieDisplayPanel extends javax.swing.JPanel {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.toedter.calendar.JMonthChooser jMonthChooser1;
     private javax.swing.JPanel moviesPanel;
     private javax.swing.JPanel search_panel;
     private cms.component.SearchTextField tf_search;

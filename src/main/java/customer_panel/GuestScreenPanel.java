@@ -6,7 +6,7 @@ package customer_panel;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 import cms.component.TimerPanel;
-import com.raven.datechooser.SelectedDate;
+import datechooser.SelectedDate;
 import controller.BookingController;
 import controller.GuestController;
 import controller.LoginController;
@@ -47,7 +47,6 @@ import static util.Util.validEmail;
 
 public class GuestScreenPanel extends javax.swing.JPanel {
     private static final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[\\w.+\\-]+@(gmail\\.com|\\w*.edu.vn)$", Pattern.CASE_INSENSITIVE);
-    private static final String api_key = System.getenv("hunter_api_key");
     private static final String API_URL = "https://api.hunter.io/v2/email-verifier?email=";
     private static final int LIMIT_SEATS = 8;
     private static final Color AVAILABLE_COLOR = new Color(0,51,102);
@@ -82,10 +81,10 @@ public class GuestScreenPanel extends javax.swing.JPanel {
     public GuestScreenPanel(Movie movie) {
         this.movie = movie;
         email_sender = new EmailSender();
-        runMyScheduler();
+        
         
         food_order = new OrderFoodDrink(guest_controller.getFoodDrinkByName("Popcorn"));
-        drink_order = new OrderFoodDrink(guest_controller.getFoodDrinkByName("Soda"));
+        drink_order = new OrderFoodDrink(guest_controller.getFoodDrinkByName("Drink"));
         this.selected_seats = new ArrayList();
         ArrayList<SelectedDate> showdates_list =  guest_controller.getScheduleForMovie(this.movie);
         // Default combobox for date
@@ -93,19 +92,15 @@ public class GuestScreenPanel extends javax.swing.JPanel {
         LocalDate curr_date = LocalDate.now();
         
         for (SelectedDate s : showdates_list){
-//            LocalDate my_date = LocalDate.of(s.getYear(), s.getMonth(), s.getDay());
-//            if (curr_date.isBefore(my_date)){
+
                 combo_box_date_model.addElement(s);
-//            }
+
         }
         
         initComponents();
         movie_title.setText(this.movie.getTitle());
         book_ticket_button.setEnabled(false);
         combo_box_dates.setModel(combo_box_date_model);
-//        timer_panel = new TimerPanel(this);
-//        timer_panel.repaint();
-//        timer_panel.revalidate();
     }
 
     /**
@@ -129,8 +124,6 @@ public class GuestScreenPanel extends javax.swing.JPanel {
         selected_seats_label = new javax.swing.JLabel();
         ticket_price_label = new javax.swing.JLabel();
         movie_title = new javax.swing.JLabel();
-        jLabel28 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
         jLabel10 = new javax.swing.JLabel();
         time_label_text = new javax.swing.JLabel();
         time_label = new javax.swing.JLabel();
@@ -191,6 +184,7 @@ public class GuestScreenPanel extends javax.swing.JPanel {
         confirm_panel.setBackground(new java.awt.Color(255, 255, 255));
 
         book_ticket_button.setBackground(new java.awt.Color(223, 177, 96));
+        book_ticket_button.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
         book_ticket_button.setText("Book Ticket");
         book_ticket_button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -207,40 +201,34 @@ public class GuestScreenPanel extends javax.swing.JPanel {
             }
         });
 
-        jLabel7.setFont(new java.awt.Font("Helvetica Neue", 1, 15)); // NOI18N
-        jLabel7.setText("Food/Drink");
+        jLabel7.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
+        jLabel7.setText("Food/Drink:");
 
-        food_drink_price_label.setFont(new java.awt.Font("Helvetica Neue", 1, 15)); // NOI18N
+        food_drink_price_label.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
         food_drink_price_label.setForeground(new java.awt.Color(255, 0, 51));
         food_drink_price_label.setText("0 VND");
 
-        jLabel14.setFont(new java.awt.Font("Helvetica Neue", 1, 15)); // NOI18N
+        jLabel14.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
         jLabel14.setText("Selected seats:");
 
-        jLabel15.setFont(new java.awt.Font("Helvetica Neue", 1, 15)); // NOI18N
-        jLabel15.setText("Ticket Price");
+        jLabel15.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
+        jLabel15.setText("Ticket Price:");
 
-        selected_seats_label.setFont(new java.awt.Font("Helvetica Neue", 1, 15)); // NOI18N
+        selected_seats_label.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
         selected_seats_label.setForeground(new java.awt.Color(255, 0, 51));
         selected_seats_label.setText("25, 26");
 
-        ticket_price_label.setFont(new java.awt.Font("Helvetica Neue", 1, 15)); // NOI18N
+        ticket_price_label.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
         ticket_price_label.setForeground(new java.awt.Color(255, 0, 51));
-        ticket_price_label.setText("120,000VND");
+        ticket_price_label.setText("0 VND");
 
-        movie_title.setFont(new java.awt.Font("Helvetica Neue", 1, 15)); // NOI18N
+        movie_title.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
         movie_title.setText("Inside Out");
 
-        jLabel28.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
-        jLabel28.setForeground(new java.awt.Color(0, 151, 178));
-        jLabel28.setText("Payment method");
-
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        jLabel10.setFont(new java.awt.Font("Helvetica Neue", 1, 15)); // NOI18N
+        jLabel10.setFont(new java.awt.Font("Helvetica Neue", 1, 24)); // NOI18N
         jLabel10.setText("Total");
 
-        time_label_text.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
+        time_label_text.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
         time_label_text.setText("Time reserved left");
 
         time_label.setFont(new java.awt.Font("Helvetica Neue", 1, 15)); // NOI18N
@@ -257,78 +245,69 @@ public class GuestScreenPanel extends javax.swing.JPanel {
                 .addGroup(confirm_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(confirm_panelLayout.createSequentialGroup()
                         .addGroup(confirm_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(confirm_panelLayout.createSequentialGroup()
-                                .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(ticket_price_label)
-                                .addGap(202, 202, 202))
-                            .addGroup(confirm_panelLayout.createSequentialGroup()
-                                .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(food_drink_price_label, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(202, 202, 202))
-                            .addGroup(confirm_panelLayout.createSequentialGroup()
-                                .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(selected_seats_label, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(7, 7, 7)))
-                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(108, 108, 108))
-                    .addGroup(confirm_panelLayout.createSequentialGroup()
-                        .addComponent(movie_title, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(272, 272, 272)
-                        .addComponent(jLabel28)
-                        .addGap(87, 87, 87)))
-                .addGroup(confirm_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(confirm_panelLayout.createSequentialGroup()
-                        .addGap(62, 62, 62)
-                        .addComponent(book_ticket_button, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(27, 27, 27))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, confirm_panelLayout.createSequentialGroup()
-                        .addGroup(confirm_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(confirm_panelLayout.createSequentialGroup()
-                                .addComponent(time_label_text)
-                                .addGap(86, 86, 86))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, confirm_panelLayout.createSequentialGroup()
-                                .addGap(41, 41, 41)
-                                .addComponent(time_label)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addGroup(confirm_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(18, 18, 18)
                         .addGroup(confirm_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(total_price_label, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(19, 19, 19))))
+                            .addComponent(selected_seats_label, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(food_drink_price_label, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(ticket_price_label, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(166, 166, 166))
+                    .addGroup(confirm_panelLayout.createSequentialGroup()
+                        .addComponent(movie_title, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGroup(confirm_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, confirm_panelLayout.createSequentialGroup()
+                        .addComponent(time_label_text)
+                        .addGap(102, 102, 102)
+                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(67, 67, 67))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, confirm_panelLayout.createSequentialGroup()
+                        .addComponent(time_label)
+                        .addGap(156, 156, 156)
+                        .addComponent(total_price_label, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(36, 36, 36))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, confirm_panelLayout.createSequentialGroup()
+                        .addComponent(book_ticket_button, javax.swing.GroupLayout.PREFERRED_SIZE, 278, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(76, 76, 76))))
         );
         confirm_panelLayout.setVerticalGroup(
             confirm_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, confirm_panelLayout.createSequentialGroup()
+            .addGroup(confirm_panelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(confirm_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(movie_title)
-                    .addComponent(jLabel28))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(confirm_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(food_drink_price_label)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(3, 3, 3)
-                .addGroup(confirm_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel14)
-                    .addComponent(selected_seats_label))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(confirm_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(ticket_price_label)
-                    .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.TRAILING)))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, confirm_panelLayout.createSequentialGroup()
-                .addGroup(confirm_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(time_label_text))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(confirm_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(total_price_label)
-                    .addComponent(time_label))
-                .addGap(6, 6, 6)
-                .addComponent(book_ticket_button, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(16, 16, 16))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, confirm_panelLayout.createSequentialGroup()
+                        .addGroup(confirm_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(confirm_panelLayout.createSequentialGroup()
+                                .addComponent(movie_title)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(confirm_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel15)
+                                    .addComponent(ticket_price_label))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel14))
+                            .addGroup(confirm_panelLayout.createSequentialGroup()
+                                .addGap(66, 66, 66)
+                                .addComponent(selected_seats_label)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(confirm_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel7)
+                            .addComponent(food_drink_price_label)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, confirm_panelLayout.createSequentialGroup()
+                        .addGroup(confirm_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(time_label_text, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(confirm_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(total_price_label)
+                            .addComponent(time_label))
+                        .addGap(18, 18, 18)
+                        .addComponent(book_ticket_button, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
         selected_seats_label.setText("");
@@ -337,7 +316,7 @@ public class GuestScreenPanel extends javax.swing.JPanel {
 
         jPanel1.add(new JLabel("Screen"), BorderLayout.CENTER);
         jPanel1.setBackground(new java.awt.Color(204, 204, 204));
-        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jPanel1.setToolTipText("Screen");
 
         jLabel13.setFont(new java.awt.Font("Helvetica Neue", 1, 17)); // NOI18N
@@ -358,11 +337,11 @@ public class GuestScreenPanel extends javax.swing.JPanel {
         );
 
         seatPanel.setBackground(new java.awt.Color(255, 255, 255));
-        seatPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        seatPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         seatPanel.setLayout(new java.awt.GridLayout(6, 8, 5, 5));
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jLabel1.setFont(new java.awt.Font("Helvetica Neue", 1, 15)); // NOI18N
         jLabel1.setText("Date");
@@ -478,7 +457,7 @@ public class GuestScreenPanel extends javax.swing.JPanel {
         jLabel23.setText("Choose Time and Seats");
 
         food_drink_panel.setBackground(new java.awt.Color(255, 255, 255));
-        food_drink_panel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        food_drink_panel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         food_drink_panel.setMaximumSize(new java.awt.Dimension(700, 200));
         food_drink_panel.setMinimumSize(new java.awt.Dimension(500, 65));
 
@@ -688,50 +667,50 @@ public class GuestScreenPanel extends javax.swing.JPanel {
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
-                        .addComponent(register_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(140, 140, 140))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
-                        .addComponent(jLabel27)
-                        .addGap(405, 405, 405))))
             .addGroup(jPanel8Layout.createSequentialGroup()
-                .addGap(212, 212, 212)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel8Layout.createSequentialGroup()
-                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(15, 15, 15)
-                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(12, 12, 12)
-                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel6))
-                    .addGroup(jPanel8Layout.createSequentialGroup()
-                        .addGap(228, 228, 228)
-                        .addComponent(jLabel18))
-                    .addComponent(food_drink_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel8Layout.createSequentialGroup()
-                        .addGap(17, 17, 17)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel8Layout.createSequentialGroup()
-                        .addGap(218, 218, 218)
-                        .addComponent(jLabel23))
-                    .addGroup(jPanel8Layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
+                        .addGap(212, 212, 212)
                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(seatPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 642, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(220, Short.MAX_VALUE))
+                            .addGroup(jPanel8Layout.createSequentialGroup()
+                                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(15, 15, 15)
+                                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(12, 12, 12)
+                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel6))
+                            .addGroup(jPanel8Layout.createSequentialGroup()
+                                .addGap(228, 228, 228)
+                                .addComponent(jLabel18))
+                            .addGroup(jPanel8Layout.createSequentialGroup()
+                                .addGap(218, 218, 218)
+                                .addComponent(jLabel23))
+                            .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(food_drink_panel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel8Layout.createSequentialGroup()
+                                    .addGap(6, 6, 6)
+                                    .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(seatPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 642, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addGap(456, 456, 456)
+                        .addComponent(jLabel27))
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addGap(199, 199, 199)
+                        .addComponent(register_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addGap(240, 240, 240)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(210, Short.MAX_VALUE))
             .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel8Layout.createSequentialGroup()
                     .addGap(377, 377, 377)
@@ -764,14 +743,14 @@ public class GuestScreenPanel extends javax.swing.JPanel {
                         .addComponent(jLabel4))
                     .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5))
-                .addGap(40, 40, Short.MAX_VALUE)
-                .addComponent(jLabel27, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 67, Short.MAX_VALUE)
+                .addComponent(jLabel27)
+                .addGap(18, 18, 18)
                 .addComponent(register_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(45, Short.MAX_VALUE))
+                .addContainerGap(40, Short.MAX_VALUE))
             .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel8Layout.createSequentialGroup()
-                    .addContainerGap(920, Short.MAX_VALUE)
+                    .addContainerGap(954, Short.MAX_VALUE)
                     .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addContainerGap()))
         );
@@ -798,7 +777,7 @@ public class GuestScreenPanel extends javax.swing.JPanel {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(scrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 541, Short.MAX_VALUE)
+                .addComponent(scrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 522, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(confirm_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -1000,8 +979,8 @@ public class GuestScreenPanel extends javax.swing.JPanel {
                     // Insert drink order here
                     booking_controller.insertOrderFoodDrink(drink_order, ticketID); 
                 }    
-                
-                email_sender.sendEmail(customer, movie, selected_schedule, selected_seats);
+                // Email sender must require setting up and buying domain. Here will only work for sending email to the user registering MailTrap by their demo domain
+//                email_sender.sendEmail(customer, movie, selected_schedule, selected_seats, ticketID, food_order, drink_order);
                 selected_seats.clear();
                 setTextForSelected_Seats();
                 showScreenForSchedule(selected_schedule);
@@ -1056,13 +1035,13 @@ public class GuestScreenPanel extends javax.swing.JPanel {
             seatButton.setBackground(new Color(0,51,102));
             // Add action listener for selection
             seatButton.addActionListener(new SeatSelectionHandler(seatButton, seat_schedule));
-        }else if(seat_schedule.getStatus().equals("Reserved")){
+        }else if(seat_schedule.getStatus().equals("Booked")){
             System.out.println("Set reserved color");
-            seatButton.setBackground(new Color(125,225,154));
-            seatButton.setEnabled(false);
-            return seatButton;
-        }else{
+            
             seatButton.setBackground(new Color(204,204,204));
+            seatButton.setEnabled(false);
+        }else{
+            seatButton.setBackground(new Color(93,202,209));
             seatButton.setEnabled(false);
         }
         
@@ -1116,6 +1095,7 @@ public class GuestScreenPanel extends javax.swing.JPanel {
                     my_timer.stop();
                     time_label.setText("");
                     my_timer = null;
+                    time_left = 180;
                 }
                 setTextForSelected_Seats();
                 setTextForPriceTicket();
@@ -1134,7 +1114,7 @@ public class GuestScreenPanel extends javax.swing.JPanel {
                 if (time_left < 0) {
                     ((Timer) e.getSource()).stop();
                     JOptionPane.showMessageDialog(GuestScreenPanel.this, "Reservation expired! Please select a seat again.");
-                    // Add logic to notify backend here
+                    
                     selected_seats.clear();
                     setTextForSelected_Seats();
                     showScreenForSchedule(selected_schedule);
@@ -1151,7 +1131,7 @@ public class GuestScreenPanel extends javax.swing.JPanel {
         panel.setPreferredSize(new Dimension(40, 36));
         panel.setBackground(Color.WHITE);
         // Custom scalable image panel
-
+        
         // price label
         String price_text = String.valueOf(schedule.getPrice());
         price_text = price_text.substring(0, price_text.length() - 3) + "K";
@@ -1170,12 +1150,14 @@ public class GuestScreenPanel extends javax.swing.JPanel {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) { 
                 if (!selected_seats.isEmpty() && selected_schedule != null && selected_schedule.equals(schedule)){
+                    System.out.println("No show again");
                     return;
                 }
                 for (SeatSchedule seat_schedule : selected_seats){
                     booking_controller.setSeatAsAvailable(seat_schedule);
                 }
                 selected_schedule = schedule;
+                System.out.println("Show screen again");
                 showScreenForSchedule(selected_schedule);
                 selected_seats.clear();
                 setTextForPriceTicket();
@@ -1209,6 +1191,9 @@ public class GuestScreenPanel extends javax.swing.JPanel {
         setTextForSelected_Seats();
         seatPanel.removeAll();
         for (SeatSchedule ss : seat_schedule_list){
+            if (ss.getStatus().equals("Reserved")){
+                System.out.println(ss.getSeat_name() + " is currently reserved");
+            }
             seatPanel.add(createButton(ss));
         }
         seatPanel.repaint();
@@ -1267,7 +1252,6 @@ public class GuestScreenPanel extends javax.swing.JPanel {
     private javax.swing.JTextField drink_quantity_tf;
     private javax.swing.JPanel food_drink_panel;
     private javax.swing.JLabel food_drink_price_label;
-    private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1281,7 +1265,6 @@ public class GuestScreenPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel27;
-    private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
