@@ -1027,7 +1027,7 @@ public class StaffScreenPanel extends javax.swing.JPanel {
             return seatButton;
         }else{
             seatButton.setBackground(new Color(204,204,204));
-            seatButton.setEnabled(false);
+        
         }
         
         return seatButton;

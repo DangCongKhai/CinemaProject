@@ -265,7 +265,7 @@ public class SignUpFrame extends javax.swing.JFrame {
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         // TODO add your handling code here:
-       Guest guest_view = new Guest();
+       GuestView guest_view = new GuestView();
        guest_view.setVisible(true);
        this.setVisible(false);
     }//GEN-LAST:event_btnBackActionPerformed

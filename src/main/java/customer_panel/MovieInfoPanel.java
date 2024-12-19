@@ -4,7 +4,7 @@
  */
 package customer_panel;
 
-import main_view.Guest;
+import main_view.GuestView;
 import java.awt.BorderLayout;
 import java.awt.Frame;
 import java.awt.Graphics;
@@ -27,7 +27,7 @@ import staff_panel.StaffScreenPanel;
  */
 public class MovieInfoPanel extends javax.swing.JPanel {
     private CustomerView customer_view;
-    private Guest user_view;
+    private GuestView user_view;
     private StaffView staff_view;
     private Movie movie;
     
@@ -54,7 +54,7 @@ public class MovieInfoPanel extends javax.swing.JPanel {
        
     }
     
-    public MovieInfoPanel(Guest frame, Movie movie_){
+    public MovieInfoPanel(GuestView frame, Movie movie_){
         initComponents();
         this.user_view = frame;
         movie = movie_;

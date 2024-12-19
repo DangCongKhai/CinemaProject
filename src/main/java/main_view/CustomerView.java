@@ -73,7 +73,7 @@ public class CustomerView extends javax.swing.JFrame {
                 }else if (menuIndex == 3){
                     main.showForm(new BookingHistoryPanel(CustomerView.this.customer));
                 }else{
-                    new Guest().setVisible(true);
+                    new GuestView().setVisible(true);
                     CustomerView.this.setVisible(false);
                     
                     

@@ -22,7 +22,7 @@ import org.jdesktop.animation.timing.Animator;
 import org.jdesktop.animation.timing.TimingTarget;
 import org.jdesktop.animation.timing.TimingTargetAdapter;
 
-public class Admin extends javax.swing.JFrame {
+public class AdminView extends javax.swing.JFrame {
 
     private MigLayout layout;
     private Menu menu;
@@ -30,7 +30,7 @@ public class Admin extends javax.swing.JFrame {
     private MainForm main;
     private Animator animator;
 
-    public Admin() {
+    public AdminView() {
         initComponents();
         init();
     }
@@ -52,8 +52,8 @@ public class Admin extends javax.swing.JFrame {
                 }else if(menuIndex == 2){
                     main.showForm(new SchedulePanel() );
                 }else{
-                    new Guest().setVisible(true);
-                    Admin.this.setVisible(false);
+                    new GuestView().setVisible(true);
+                    AdminView.this.setVisible(false);
                     
                 }
             }
@@ -62,9 +62,9 @@ public class Admin extends javax.swing.JFrame {
             @Override
             public void showPopup(Component com) {
                 MenuItem item = (MenuItem) com;
-                PopupMenu popup = new PopupMenu(Admin.this, item.getIndex(), item.getEventSelected(), item.getMenu().getSubMenu());
-                int x = Admin.this.getX() + 52;
-                int y = Admin.this.getY() + com.getY() + 86;
+                PopupMenu popup = new PopupMenu(AdminView.this, item.getIndex(), item.getEventSelected(), item.getMenu().getSubMenu());
+                int x = AdminView.this.getX() + 52;
+                int y = AdminView.this.getY() + com.getY() + 86;
                 popup.setLocation(x, y);
                 popup.setVisible(true);
             }
@@ -162,16 +162,16 @@ public class Admin extends javax.swing.JFrame {
 //        //</editor-fold>
 //        
 //        /* Create and display the form */
-//        try {
-//            UIManager.setLookAndFeel(new FlatIntelliJLaf());
-//        } catch (UnsupportedLookAndFeelException e) {}
-//
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            @Override
-//            public void run() {
-//                new Admin().setVisible(true);
-//            }
-//        });
+////        try {
+////            UIManager.setLookAndFeel(new FlatIntelliJLaf());
+////        } catch (UnsupportedLookAndFeelException e) {}
+////
+////        java.awt.EventQueue.invokeLater(new Runnable() {
+////            @Override
+////            public void run() {
+////                new Admin().setVisible(true);
+////            }
+////        });
 //    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

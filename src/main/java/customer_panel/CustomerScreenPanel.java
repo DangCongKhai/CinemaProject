@@ -899,7 +899,7 @@ public class CustomerScreenPanel extends javax.swing.JPanel {
             seatButton.setEnabled(false);
         }else {
             seatButton.setBackground(new Color(93,202,209));
-            seatButton.setEnabled(false);
+
         }
         
         return seatButton;

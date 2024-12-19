@@ -3,6 +3,7 @@
 /Users/mac/Desktop/Code/MovieManagementSystem/src/main/java/model/Screen.java
 /Users/mac/Desktop/Code/MovieManagementSystem/src/main/java/controller/SignUpController.java
 /Users/mac/Desktop/Code/MovieManagementSystem/src/main/java/cms/component/Card.java
+/Users/mac/Desktop/Code/MovieManagementSystem/src/main/java/main_view/MainView.java
 /Users/mac/Desktop/Code/MovieManagementSystem/src/main/java/util/MovieDataFetcher.java
 /Users/mac/Desktop/Code/MovieManagementSystem/src/main/java/swing_component/PopupMenu.java
 /Users/mac/Desktop/Code/MovieManagementSystem/src/main/java/model/ModelMenu.java
@@ -10,6 +11,7 @@
 /Users/mac/Desktop/Code/MovieManagementSystem/src/main/java/admin_panel/MovieManagementPanel.java
 /Users/mac/Desktop/Code/MovieManagementSystem/src/main/java/staff_panel/StaffScreenPanel.java
 /Users/mac/Desktop/Code/MovieManagementSystem/src/main/java/customer_panel/BookingHistoryPanel.java
+/Users/mac/Desktop/Code/MovieManagementSystem/src/main/java/main_view/AdminView.java
 /Users/mac/Desktop/Code/MovieManagementSystem/src/main/java/swing_component/ProgressBarCustom.java
 /Users/mac/Desktop/Code/MovieManagementSystem/src/main/java/swing_component/Button.java
 /Users/mac/Desktop/Code/MovieManagementSystem/src/main/java/main_view/SignInFrame.java
@@ -39,7 +41,6 @@
 /Users/mac/Desktop/Code/MovieManagementSystem/src/main/java/model/Ticket.java
 /Users/mac/Desktop/Code/MovieManagementSystem/src/main/java/main_view/CustomerView.java
 /Users/mac/Desktop/Code/MovieManagementSystem/src/main/java/swing_component/MenuButton.java
-/Users/mac/Desktop/Code/MovieManagementSystem/src/main/java/main_view/Admin.java
 /Users/mac/Desktop/Code/MovieManagementSystem/src/main/java/cms/component/btnSignInOut.java
 /Users/mac/Desktop/Code/MovieManagementSystem/src/main/java/swing_component/ButtonBadges.java
 /Users/mac/Desktop/Code/MovieManagementSystem/src/main/java/controller/BookingController.java

@@ -61,7 +61,7 @@ public class StaffView extends javax.swing.JFrame {
                 if (menuIndex == 0) {
                     main.showForm(new MovieDisplayPanel(StaffView.this));
                 }else{
-                    new Guest().setVisible(true);
+                    new GuestView().setVisible(true);
                     StaffView.this.setVisible(false);
                 }
             }

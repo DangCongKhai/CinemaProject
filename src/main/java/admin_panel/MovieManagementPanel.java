@@ -475,7 +475,7 @@ public class MovieManagementPanel extends javax.swing.JPanel {
         }
         Movie new_movie = new Movie(title, genre, duration, actor, description, image);
         Movie returned_movie = admin_controller.addMovie(new_movie);
-        if(!returned_movie.equals(null)){
+        if(returned_movie != null){
             movies_list.add(returned_movie);
             JOptionPane.showMessageDialog(this, String.format("Successful adding %s to the database", title), "Status", JOptionPane.PLAIN_MESSAGE);
             

@@ -1036,13 +1036,14 @@ public class GuestScreenPanel extends javax.swing.JPanel {
             // Add action listener for selection
             seatButton.addActionListener(new SeatSelectionHandler(seatButton, seat_schedule));
         }else if(seat_schedule.getStatus().equals("Booked")){
-            System.out.println("Set reserved color");
+           
             
             seatButton.setBackground(new Color(204,204,204));
             seatButton.setEnabled(false);
         }else{
+            System.out.println("Set reserved color");
             seatButton.setBackground(new Color(93,202,209));
-            seatButton.setEnabled(false);
+
         }
         
         return seatButton;
@@ -1166,7 +1167,7 @@ public class GuestScreenPanel extends javax.swing.JPanel {
                     my_timer = null;
                 }
                
-                // Handle changing screen here
+                
             }
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -1191,10 +1192,14 @@ public class GuestScreenPanel extends javax.swing.JPanel {
         setTextForSelected_Seats();
         seatPanel.removeAll();
         for (SeatSchedule ss : seat_schedule_list){
+            JButton my_button = createButton(ss);
             if (ss.getStatus().equals("Reserved")){
                 System.out.println(ss.getSeat_name() + " is currently reserved");
+                System.out.println("My back ground button" + my_button.getBackground());
             }
-            seatPanel.add(createButton(ss));
+            
+            
+            seatPanel.add(my_button);
         }
         seatPanel.repaint();
         seatPanel.revalidate();

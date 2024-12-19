@@ -514,7 +514,7 @@ public class SchedulePanel extends javax.swing.JPanel {
         if (result == JOptionPane.YES_OPTION){
             Schedule schedule = new Schedule(title, date, start_time_text, end_time_text, price, screen_number );
             Schedule returned_schedule = admin_controller.insertSchedule(schedule);
-            if (!returned_schedule.equals(null)){
+            if (returned_schedule != null){
                 schedules_list.add(returned_schedule);
                 table_model.addRow(row);
                 JOptionPane.showMessageDialog(this, "Successfully adding schedule", "Status", JOptionPane.PLAIN_MESSAGE);

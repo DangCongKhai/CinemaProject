@@ -5,7 +5,7 @@
 package customer_panel;
 
 import controller.CustomerController;
-import main_view.Guest;
+import main_view.GuestView;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -39,7 +39,7 @@ import model.Movie;
 public class MovieDisplayPanel extends javax.swing.JPanel {
     private static CustomerController customer_controller = CustomerController.getInstance();
     private CustomerView customer_view;
-    private Guest my_guest;
+    private GuestView my_guest;
     private StaffView staff_view;
     ArrayList<Movie> movies_list = customer_controller.getMovies();
     private JPanel temp_panel;
@@ -59,7 +59,7 @@ public class MovieDisplayPanel extends javax.swing.JPanel {
     }
     
     
-    public MovieDisplayPanel(Guest frame) {
+    public MovieDisplayPanel(GuestView frame) {
         this.my_guest = frame;
         initComponents();
         this.add(search_panel, BorderLayout.NORTH);

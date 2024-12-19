@@ -34,7 +34,7 @@ cms/component/Menu$1.class
 controller/BookingController.class
 admin_panel/SchedulePanel$ComboBoxActionListener.class
 controller/AdminController.class
-main_view/Admin$3.class
+main_view/AdminView.class
 admin_panel/MovieManagementPanel$6.class
 customer_panel/GuestScreenPanel$6.class
 model/ModelCard.class
@@ -42,7 +42,6 @@ customer_panel/CustomerScreenPanel$6.class
 cms/component/ScrollBarCustom.class
 util/DataUpdateWorker.class
 cms/component/Menu.class
-main_view/Admin$2.class
 main_view/SignInFrame$4.class
 customer_panel/GuestScreenPanel$5.class
 swing_component/ImageAvatar.class
@@ -59,10 +58,10 @@ cms/component/Header.class
 cms/component/Card.class
 main_view/SignInFrame$3.class
 customer_panel/CustomerScreenPanel$10.class
-main_view/Admin$1.class
 datechooser/Slider$4.class
 main_view/CustomerView.class
 swing_component/MenuItem$2.class
+main_view/AdminView$3.class
 customer_panel/BookingHistoryPanel$2.class
 swing_component/ProgressBarCustom$1.class
 customer_panel/BookingHistoryPanel.class
@@ -98,15 +97,17 @@ datechooser/DateChooser$2.class
 controller/CustomerController.class
 admin_panel/SchedulePanel$7.class
 customer_panel/CustomerScreenPanel$3.class
+main_view/AdminView$4.class
 datechooser/Months.class
 main_view/Guest.class
-main_view/Admin.class
 cms/component/Header$1.class
+main_view/MainView$1.class
 customer_panel/EditInfoPanel$1.class
 model/EmailSender.class
 datechooser/DateChooser.class
 admin_panel/MovieManagementPanel$4.class
 customer_panel/GuestScreenPanel$13.class
+main_view/MainView.class
 main_view/SignUpFrame$1.class
 controller/GuestController.class
 admin_panel/AdminHistoryViewForm$4.class
@@ -117,6 +118,7 @@ cms/component/SearchTextField.class
 datechooser/SelectedAction.class
 main_view/SignInFrame$2.class
 datechooser/DateChooser$5.class
+main_view/AdminView$2.class
 event_interface/EventMenuSelected.class
 customer_panel/GuestScreenPanel$SeatSelectionHandler.class
 admin_panel/SchedulePanel$6.class
@@ -124,6 +126,7 @@ main_view/SignUpFrame.class
 cms/component/PanelCover.class
 customer_panel/EditInfoPanel$6.class
 customer_panel/GuestScreenPanel.class
+main_view/AdminView$1.class
 customer_panel/CustomerScreenPanel.class
 datechooser/DateChooser$6.class
 swing_component/PopupMenu$1.class
@@ -133,7 +136,6 @@ admin_panel/DashBoardPanel$1.class
 main_view/CustomerView$4.class
 model/Customer.class
 admin_panel/SchedulePanel$5.class
-main_view/Guest$5.class
 datechooser/Slider$2.class
 customer_panel/EditInfoPanel$5.class
 main_view/Guest$4.class
@@ -164,7 +166,6 @@ admin_panel/SchedulePanel$2.class
 datechooser/DateChooser$7.class
 cms/component/TableHeader.class
 customer_panel/CustomerScreenPanel$8.class
-main_view/Admin$4.class
 datechooser/Event.class
 admin_panel/DashBoardPanel$4.class
 controller/LoginController.class

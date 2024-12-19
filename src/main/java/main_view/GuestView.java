@@ -28,7 +28,7 @@ import org.jdesktop.animation.timing.TimingTarget;
 import org.jdesktop.animation.timing.TimingTargetAdapter;
 import static util.Util.runMyScheduler;
 
-public class Guest extends javax.swing.JFrame {
+public class GuestView extends javax.swing.JFrame {
 
     private MigLayout layout;
     private Menu menu;
@@ -36,7 +36,7 @@ public class Guest extends javax.swing.JFrame {
     private MainForm main;
     private Animator animator;
 
-    public Guest() {
+    public GuestView() {
         initComponents();
         runMyScheduler();
         init();
@@ -48,23 +48,24 @@ public class Guest extends javax.swing.JFrame {
         menu = new Menu();
        
         header = new Header();
-        
+        header.setUserName("Guest");
+        header.setRole("Guest");
         main = new MainForm();
         menu.addEvent(new EventMenuSelected() {
             @Override
             public void menuSelected(int menuIndex, int subMenuIndex) {
                 System.out.println("Menu Index : " + menuIndex + " SubMenu Index " + subMenuIndex);
                 if (menuIndex == 0) {
-                    main.showForm(new MovieDisplayPanel(Guest.this));
+                    main.showForm(new MovieDisplayPanel(GuestView.this));
                 }else if(menuIndex == 1){
                     main.showForm(new FrequentlyAskedQuestionPanel());
                 }else if (menuIndex == 2){
                     new SignInFrame().setVisible(true);
-                    Guest.this.setVisible(false);
+                    GuestView.this.setVisible(false);
                
                 }else{
                     new SignUpFrame().setVisible(true);
-                    Guest.this.setVisible(false);
+                    GuestView.this.setVisible(false);
                     
                 }
             }
@@ -73,9 +74,9 @@ public class Guest extends javax.swing.JFrame {
             @Override
             public void showPopup(Component com) {
                 MenuItem item = (MenuItem) com;
-                PopupMenu popup = new PopupMenu(Guest.this, item.getIndex(), item.getEventSelected(), item.getMenu().getSubMenu());
-                int x = Guest.this.getX() + 52;
-                int y = Guest.this.getY() + com.getY() + 86;
+                PopupMenu popup = new PopupMenu(GuestView.this, item.getIndex(), item.getEventSelected(), item.getMenu().getSubMenu());
+                int x = GuestView.this.getX() + 52;
+                int y = GuestView.this.getY() + com.getY() + 86;
                 popup.setLocation(x, y);
                 popup.setVisible(true);
             }
@@ -126,7 +127,7 @@ public class Guest extends javax.swing.JFrame {
         });
  
         //  Start with this form
-        main.showForm(new MovieDisplayPanel(Guest.this));
+        main.showForm(new MovieDisplayPanel(GuestView.this));
     }
     public MainForm getMainForm(){
         return main;
@@ -171,25 +172,7 @@ public class Guest extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-        
-        //</editor-fold>
-        
-        /* Create and display the form */
-        try {
-            UIManager.setLookAndFeel(new FlatIntelliJLaf());
-        } catch (UnsupportedLookAndFeelException e) {}
-
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new Guest().setVisible(true);
-            }
-        });
-    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLayeredPane bg;

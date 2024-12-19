@@ -1,6 +1,6 @@
 package main_view;
 
-import main_view.Admin;
+import main_view.AdminView;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import controller.LoginController;
 import java.sql.SQLException;
@@ -271,7 +271,7 @@ public class SignInFrame extends javax.swing.JFrame {
                 customer_view.setVisible(true);
                 this.setVisible(false);
             }else if (role.equals("Admin")){
-                Admin admin_view = new Admin();
+                AdminView admin_view = new AdminView();
 //                    admin_view.setUser(user);
                 admin_view.setVisible(true);
                 this.setVisible(false);
@@ -304,7 +304,7 @@ public class SignInFrame extends javax.swing.JFrame {
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         // TODO add your handling code here:
-       Guest guest_view = new Guest();
+       GuestView guest_view = new GuestView();
        guest_view.setVisible(true);
        this.setVisible(false);
     }//GEN-LAST:event_btnBackActionPerformed
