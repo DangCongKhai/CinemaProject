@@ -109,7 +109,7 @@ public class Util {
     public static String getPassword(){
         Properties properties = new Properties();
         String password = "";
-        try (FileInputStream input = new FileInputStream("src/main/java/model/credentials.properties")) {
+        try (FileInputStream input = new FileInputStream("src/main/java/credentials.properties")) {
             properties.load(input);
             // Retrieve the password/key
             password = properties.getProperty("password");
@@ -191,6 +191,7 @@ public class Util {
         schedulerThread.start();
         
     }
+
 }
 
 

@@ -1133,9 +1133,7 @@ public class StaffScreenPanel extends javax.swing.JPanel {
         panel.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) { 
-                if (!selected_seats.isEmpty() && selected_schedule != null && selected_schedule.equals(schedule)){
-                    return;
-                }
+                
                 for (SeatSchedule seat_schedule : selected_seats){
                     booking_controller.setSeatAsAvailable(seat_schedule);
                 }

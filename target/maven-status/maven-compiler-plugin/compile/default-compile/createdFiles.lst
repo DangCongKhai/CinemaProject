@@ -18,7 +18,6 @@ admin_panel/AdminHistoryViewForm$1.class
 datechooser/Slider.class
 datechooser/Slider$5.class
 datechooser/Dates.class
-main_view/Guest$2.class
 customer_panel/CustomerScreenPanel$1.class
 customer_panel/EditInfoPanel$3.class
 main_view/SignUpFrame$4.class
@@ -67,6 +66,7 @@ swing_component/ProgressBarCustom$1.class
 customer_panel/BookingHistoryPanel.class
 customer_panel/EditInfoPanel$2.class
 swing_component/Button$1.class
+main_view/GuestView$2.class
 customer_panel/CustomerScreenPanel$SeatSelectionHandler.class
 controller/SignUpController.class
 admin_panel/MovieManagementPanel$5.class
@@ -77,6 +77,7 @@ cms/component/ModernScrollBarUI.class
 datechooser/DateChooser$4.class
 customer_panel/GuestScreenPanel$7.class
 main_view/SignInFrame$1.class
+main_view/GuestView$1.class
 admin_panel/AdminHistoryViewForm.class
 datechooser/Slider$6.class
 swing_component/Button$2.class
@@ -99,7 +100,6 @@ admin_panel/SchedulePanel$7.class
 customer_panel/CustomerScreenPanel$3.class
 main_view/AdminView$4.class
 datechooser/Months.class
-main_view/Guest.class
 cms/component/Header$1.class
 main_view/MainView$1.class
 customer_panel/EditInfoPanel$1.class
@@ -110,6 +110,7 @@ customer_panel/GuestScreenPanel$13.class
 main_view/MainView.class
 main_view/SignUpFrame$1.class
 controller/GuestController.class
+main_view/GuestView$3.class
 admin_panel/AdminHistoryViewForm$4.class
 customer_panel/CustomerScreenPanel$4.class
 customer_panel/GuestScreenPanel$8.class
@@ -134,11 +135,11 @@ database/Database.class
 customer_panel/CustomerScreenPanel$5.class
 admin_panel/DashBoardPanel$1.class
 main_view/CustomerView$4.class
+main_view/GuestView$4.class
 model/Customer.class
 admin_panel/SchedulePanel$5.class
 datechooser/Slider$2.class
 customer_panel/EditInfoPanel$5.class
-main_view/Guest$4.class
 util/AdminHistoryDataFetcher.class
 util/MovieDataFetcher.class
 main_view/SignUpFrame$2.class
@@ -151,7 +152,6 @@ datechooser/Slider$1.class
 customer_panel/GuestScreenPanel$4.class
 customer_panel/EditInfoPanel.class
 cms/component/ModernScrollBarUI$ScrollBarButton.class
-main_view/Guest$3.class
 customer_panel/GuestScreenPanel$1.class
 main_view/SignUpFrame$5.class
 cms/component/Table$2.class
@@ -165,6 +165,7 @@ admin_panel/MovieManagementPanel.class
 admin_panel/SchedulePanel$2.class
 datechooser/DateChooser$7.class
 cms/component/TableHeader.class
+main_view/GuestView.class
 customer_panel/CustomerScreenPanel$8.class
 datechooser/Event.class
 admin_panel/DashBoardPanel$4.class
@@ -177,7 +178,6 @@ event_interface/EventShowPopupMenu.class
 customer_panel/GuestScreenPanel$3.class
 admin_panel/MovieManagementPanel$10.class
 cms/component/TimerPanel.class
-main_view/Guest$1.class
 customer_panel/GuestScreenPanel$2.class
 cms/component/Table.class
 admin_panel/SchedulePanel$1.class

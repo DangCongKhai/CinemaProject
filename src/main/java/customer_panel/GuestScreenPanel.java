@@ -963,30 +963,39 @@ public class GuestScreenPanel extends javax.swing.JPanel {
             int ticketID = booking_controller.insertTicketToDatabaseForCustomer(ticket);
             
             if (ticketID != -1){
-                // Check if there is order food?
+                
                 if (booking_controller.insertDataToTicketSeat(ticketID, selected_seats)){
-                     JOptionPane.showMessageDialog(this, "You have successully booked the ticket", "Status", JOptionPane.PLAIN_MESSAGE);
+                     // Set the status of all the reserved seats as booked
+                    booking_controller.setReservedSeatToBooked(selected_seats);
+
+                    if (food_order.getQuantity() > 0){
+                        // Insert food order here
+                        booking_controller.insertOrderFoodDrink(food_order, ticketID);
+                    }
+                    if (drink_order.getQuantity() > 0){
+                        // Insert drink order here
+                        booking_controller.insertOrderFoodDrink(drink_order, ticketID); 
+                    }    
+                    // Email sender must require setting up and buying domain. Here will only work for sending email to the user registering MailTrap by their demo domain
+                    email_sender.sendEmail(customer, movie, selected_schedule, selected_seats, ticketID, food_order, drink_order);
+                    JOptionPane.showMessageDialog(this, "You have successully booked the ticket. Please check your email for booking confirmation!", "Status", JOptionPane.PLAIN_MESSAGE);
+                    
+                }else{
+                    JOptionPane.showMessageDialog(this, "Error occur during booking. Please book your ticket again!", "Status", JOptionPane.PLAIN_MESSAGE);
                 }
-                
-                // Set the status of all the reserved seats as booked
-                booking_controller.setReservedSeatToBooked(selected_seats);
-                
-                if (food_order.getQuantity() > 0){
-                    // Insert food order here
-                    booking_controller.insertOrderFoodDrink(food_order, ticketID);
-                }
-                if (drink_order.getQuantity() > 0){
-                    // Insert drink order here
-                    booking_controller.insertOrderFoodDrink(drink_order, ticketID); 
-                }    
-                // Email sender must require setting up and buying domain. Here will only work for sending email to the user registering MailTrap by their demo domain
-//                email_sender.sendEmail(customer, movie, selected_schedule, selected_seats, ticketID, food_order, drink_order);
                 selected_seats.clear();
                 setTextForSelected_Seats();
+                food_drink_price_label.setText("");
+                food_order.setQuantity(0);
+                drink_order.setQuantity(0);
+                popcorn_quantity_tf.setText("0");
+                drink_quantity_tf.setText("0");
                 showScreenForSchedule(selected_schedule);
                 setTextForPriceTicket();
                 my_timer.stop();
                 time_label.setText("");
+                
+                
             }  
         } else {
             System.out.println("Booking canceled.");
@@ -1150,20 +1159,20 @@ public class GuestScreenPanel extends javax.swing.JPanel {
         panel.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) { 
-                if (!selected_seats.isEmpty() && selected_schedule != null && selected_schedule.equals(schedule)){
-                    System.out.println("No show again");
-                    return;
-                }
+//                if (!selected_seats.isEmpty() && selected_schedule != null && selected_schedule.equals(schedule)){
+//                    return;
+//                }
                 for (SeatSchedule seat_schedule : selected_seats){
                     booking_controller.setSeatAsAvailable(seat_schedule);
                 }
                 selected_schedule = schedule;
-                System.out.println("Show screen again");
+              
                 showScreenForSchedule(selected_schedule);
                 selected_seats.clear();
+                
                 setTextForPriceTicket();
                 if(my_timer!= null){
-                     my_timer.stop();
+                    my_timer.stop();
                     my_timer = null;
                 }
                

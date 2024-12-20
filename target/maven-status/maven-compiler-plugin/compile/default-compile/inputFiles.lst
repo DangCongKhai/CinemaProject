@@ -1,6 +1,7 @@
 /Users/mac/Desktop/Code/MovieManagementSystem/src/main/java/main_view/StaffView.java
 /Users/mac/Desktop/Code/MovieManagementSystem/src/main/java/model/FoodDrink.java
 /Users/mac/Desktop/Code/MovieManagementSystem/src/main/java/model/Screen.java
+/Users/mac/Desktop/Code/MovieManagementSystem/src/main/java/main_view/GuestView.java
 /Users/mac/Desktop/Code/MovieManagementSystem/src/main/java/controller/SignUpController.java
 /Users/mac/Desktop/Code/MovieManagementSystem/src/main/java/cms/component/Card.java
 /Users/mac/Desktop/Code/MovieManagementSystem/src/main/java/main_view/MainView.java
@@ -60,7 +61,6 @@
 /Users/mac/Desktop/Code/MovieManagementSystem/src/main/java/controller/GuestController.java
 /Users/mac/Desktop/Code/MovieManagementSystem/src/main/java/controller/CustomerController.java
 /Users/mac/Desktop/Code/MovieManagementSystem/src/main/java/cms/component/TableHeader.java
-/Users/mac/Desktop/Code/MovieManagementSystem/src/main/java/main_view/Guest.java
 /Users/mac/Desktop/Code/MovieManagementSystem/src/main/java/customer_panel/MovieInfoPanel.java
 /Users/mac/Desktop/Code/MovieManagementSystem/src/main/java/customer_panel/GuestScreenPanel.java
 /Users/mac/Desktop/Code/MovieManagementSystem/src/main/java/swing_component/MenuAnimation.java
