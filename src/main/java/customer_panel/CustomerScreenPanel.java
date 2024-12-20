@@ -853,6 +853,11 @@ public class CustomerScreenPanel extends javax.swing.JPanel {
 //                email_sender.sendEmail(user, movie, selected_schedule, selected_seats, ticketID, food_order, drink_order);
                 selected_seats.clear();
                 this.setTextForSelected_Seats();
+                food_drink_price_label.setText("");
+                food_order.setQuantity(0);
+                drink_order.setQuantity(0);
+                popcorn_quantity_tf.setText("0");
+                drink_quantity_tf.setText("0");
                 this.showScreenForSchedule(selected_schedule);
                 this.setTextForPriceTicket();
                 my_timer.stop();

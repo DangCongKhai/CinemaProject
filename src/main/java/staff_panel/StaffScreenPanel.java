@@ -968,6 +968,11 @@ public class StaffScreenPanel extends javax.swing.JPanel {
 //                email_sender.sendEmailToGuest(movie, selected_schedule, selected_seats, ticketID, food_order, drink_order, email, name);
                 selected_seats.clear();
                 setTextForSelected_Seats();
+                food_drink_price_label.setText("");
+                food_order.setQuantity(0);
+                drink_order.setQuantity(0);
+                popcorn_quantity_tf.setText("0");
+                drink_quantity_tf.setText("0");
                 showScreenForSchedule(selected_schedule);
                 setTextForPriceTicket();
                 my_timer.stop();
