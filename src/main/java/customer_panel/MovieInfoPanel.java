@@ -79,9 +79,9 @@ public class MovieInfoPanel extends javax.swing.JPanel {
         int hour = minutes/60;
         int minute = minutes%60;
         if (hour == 1){
-            lb_duration.setText(hour + "hour" + minute + "minutes" );
+            lb_duration.setText(hour + " hour " + minute + " minutes" );
         }else{
-            lb_duration.setText(hour + "hours" + minute + "minutes" );
+            lb_duration.setText(hour + " hours " + minute + " minutes" );
         }
         
         lb_description.setText("<html>" + movie.getDescription() + "</html>");
